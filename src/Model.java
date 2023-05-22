@@ -30,7 +30,7 @@ public class Model extends Observable implements Runnable {
 
             // 1 second interval loop
             try {
-                Thread.sleep(100);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
