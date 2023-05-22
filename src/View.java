@@ -5,6 +5,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Observable;
 import java.util.Observer;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 public class View extends JFrame implements Observer {
 
@@ -83,6 +86,29 @@ public class View extends JFrame implements Observer {
             parcel.setBorder(blackLine);
             this.gridPanel.add(parcel);
         }
+
+        // Création de la barre de menu
+        JMenuBar menuBar = new JMenuBar();
+
+// Création du menu "Fichier"
+        JMenu fileMenu = new JMenu("Fichier");
+
+// Création des éléments du menu "Fichier"
+        JMenuItem openItem = new JMenuItem("Ouvrir");
+        JMenuItem saveItem = new JMenuItem("Enregistrer");
+        JMenuItem exitItem = new JMenuItem("Quitter");
+
+// Ajout des éléments au menu "Fichier"
+        fileMenu.add(openItem);
+        fileMenu.add(saveItem);
+        fileMenu.addSeparator(); // Ajout d'un séparateur
+        fileMenu.add(exitItem);
+
+// Ajout du menu "Fichier" à la barre de menu
+        menuBar.add(fileMenu);
+
+// Définition de la barre de menu pour la fenêtre
+        setJMenuBar(menuBar);
 
 // Création des contraintes pour la disposition GridBagLayout
         GridBagConstraints gbc = new GridBagConstraints();
