@@ -4,6 +4,7 @@ import java.util.Random;
 public class Model extends Observable implements Runnable {
 
     protected boolean[][] grid;
+    private boolean isPaused = false;
 
     public Model(){
         this.grid = new boolean[10][10];
@@ -11,6 +12,17 @@ public class Model extends Observable implements Runnable {
 
     public Model(boolean[][] grid) {
         this.grid = grid;
+    }
+    public int cooldown = 1000;
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void togglePause() {
+        isPaused = !isPaused;
+        setChanged();
+        notifyObservers();
     }
 
     @Override
@@ -28,12 +40,15 @@ public class Model extends Observable implements Runnable {
             setChanged();
             notifyObservers();
 
-            // 1 second interval loop
             try {
-                Thread.sleep(1000);
+                Thread.sleep(this.cooldown);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public void setRefreshRate(int i) {
+        this.cooldown = i;
     }
 }

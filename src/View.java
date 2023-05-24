@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Observable;
@@ -8,6 +10,7 @@ import java.util.Observer;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JButton;
 
 public class View extends JFrame implements Observer {
 
@@ -22,6 +25,12 @@ public class View extends JFrame implements Observer {
     protected JTextField onionTextField;
     protected JTextField potatoTextField;
 
+    private JMenuItem pauseMenuItem;
+
+    protected JButton faster;
+    protected JButton slower;
+    protected JButton reset;
+
     public View(Model m) {
         super();
 
@@ -35,6 +44,7 @@ public class View extends JFrame implements Observer {
         this.tomatoTextField = new JTextField();
         this.onionTextField = new JTextField();
         this.potatoTextField = new JTextField();
+        this.pauseMenuItem = new JMenuItem("Pause");
 
         build();
 
@@ -60,6 +70,7 @@ public class View extends JFrame implements Observer {
         this.tomatoTextField = new JTextField();
         this.onionTextField = new JTextField();
         this.potatoTextField = new JTextField();
+        this.pauseMenuItem = new JMenuItem("Pause");
 
         build();
 
@@ -70,6 +81,14 @@ public class View extends JFrame implements Observer {
                 System.exit(0);
             }
         });
+    }
+
+    public void updatePauseMenuItem() {
+        if (m.isPaused()) {
+            pauseMenuItem.setText("Play");
+        } else {
+            pauseMenuItem.setText("Pause");
+        }
     }
 
     /**
@@ -90,69 +109,165 @@ public class View extends JFrame implements Observer {
         // Création de la barre de menu
         JMenuBar menuBar = new JMenuBar();
 
-// Création du menu "Fichier"
-        JMenu fileMenu = new JMenu("Fichier");
+        // Création du menu "Game"
+        JMenu fileMenu = new JMenu("Game");
 
-// Création des éléments du menu "Fichier"
-        JMenuItem openItem = new JMenuItem("Ouvrir");
-        JMenuItem saveItem = new JMenuItem("Enregistrer");
-        JMenuItem exitItem = new JMenuItem("Quitter");
+        // Création des éléments du menu "Fichier"
+        JMenuItem PauseItem = new JMenuItem("Pause");
+        JMenuItem saveItem = new JMenuItem("Save");
+        JMenuItem exitItem = new JMenuItem("Quit");
 
-// Ajout des éléments au menu "Fichier"
-        fileMenu.add(openItem);
+        // Ajout des éléments au menu "Game"
+        fileMenu.add(PauseItem);
         fileMenu.add(saveItem);
         fileMenu.addSeparator(); // Ajout d'un séparateur
         fileMenu.add(exitItem);
 
-// Ajout du menu "Fichier" à la barre de menu
+        ActionListener exitActionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        };
+
+        PauseItem.addActionListener(e -> {
+            if (PauseItem.getText().equals("Pause")) {
+                PauseItem.setText("Play");
+            } else {
+                PauseItem.setText("Pause");
+            }
+        });
+
+        // Ajout de l'ActionListener à exitItem
+        exitItem.addActionListener(exitActionListener);
+
+        // Ajout du menu "Game" à la barre de menu
         menuBar.add(fileMenu);
 
-// Définition de la barre de menu pour la fenêtre
-        setJMenuBar(menuBar);
+        // Création du menu "Plants"
+        JMenu plantsMenu = new JMenu("Plants");
 
-// Création des contraintes pour la disposition GridBagLayout
+        // Création des éléments du menu "Plants"
+        JMenuItem tomatoesItem = new JMenuItem("Tomates");
+        JMenuItem onionsItem = new JMenuItem("Oignons");
+        JMenuItem potatoesItem = new JMenuItem("Patates");
+
+        // Ajout des éléments au menu "Plants"
+        plantsMenu.add(tomatoesItem);
+        plantsMenu.add(onionsItem);
+        plantsMenu.add(potatoesItem);
+
+        // Ajout du menu "Plants" à la barre de menu
+        menuBar.add(plantsMenu);
+
+        // Définition de la barre de menu pour la vue
+        this.setJMenuBar(menuBar);
+
+        slower = new JButton("-");
+        reset = new JButton("=");
+        faster = new JButton("+");
+
+        this.faster.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int tpsRefresh= m.cooldown - 500;
+                if (tpsRefresh<=100)
+                {
+                    tpsRefresh= 100;
+                }
+                m.setRefreshRate(tpsRefresh);
+                System.out.println(e);
+                // Ajoutez d'autres instructions à exécuter lorsque le bouton est cliqué
+            }
+        });
+
+        this.reset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                m.setRefreshRate(1000);
+                System.out.println(e);
+                // Ajoutez d'autres instructions à exécuter lorsque le bouton est cliqué
+            }
+        });
+
+        this.slower.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int tpsRefresh= m.cooldown + 500;
+                if (tpsRefresh>=5000)
+                {
+                    tpsRefresh= 5000;
+                }
+                m.setRefreshRate(tpsRefresh);
+                System.out.println(e);
+                // Ajoutez d'autres instructions à exécuter lorsque le bouton est cliqué
+            }
+        });
+
+        // Modification de l'infoPanel en utilisant un GridBagLayout
+        infoPanel.setLayout(new GridBagLayout());
+
+        // Création des contraintes pour la disposition GridBagLayout
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.WEST; // Alignement à gauche
         gbc.insets = new Insets(5, 5, 5, 5); // Espacement autour des composants
 
-        // Ajout du JLabel "Tomates"
+        // Ajout du JLabel "Tomates" et du JTextField associé
         gbc.gridx = 0; // Colonne 0
         gbc.gridy = 0; // Ligne 0
-        this.infoPanel.add(tomatoLabel, gbc);
+        gbc.gridwidth = 2; // Largeur de 2 cellules
+        infoPanel.add(tomatoLabel, gbc);
 
-        // Ajout du JTextField pour les tomates
         gbc.gridx = 1; // Colonne 1
         gbc.gridy = 0; // Ligne 0
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Expansion horizontale
-        gbc.weightx = 1.0; // Poids horizontal
-        tomatoTextField.setColumns(7); // Définition du nombre de colonnes pour la taille
-        this.infoPanel.add(tomatoTextField, gbc);
+        gbc.gridwidth = 1; // Largeur de 1 cellule
+        gbc.weightx = 0.0; // Poids horizontal
+        gbc.weighty = 1.0; // Poids vertical
+        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
+        infoPanel.add(tomatoTextField, gbc);
 
-        // Ajout du JLabel "Oignons"
+        // Ajout du JLabel "Oignons" et du JTextField associé
         gbc.gridx = 0; // Colonne 0
         gbc.gridy = 1; // Ligne 1
-        this.infoPanel.add(onionLabel, gbc);
+        gbc.gridwidth = 2; // Largeur de 2 cellules
+        infoPanel.add(onionLabel, gbc);
 
-        // Ajout du JTextField pour les oignons
         gbc.gridx = 1; // Colonne 1
         gbc.gridy = 1; // Ligne 1
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Expansion horizontale
-        gbc.weightx = 1.0; // Poids horizontal
-        onionTextField.setColumns(7); // Définition du nombre de colonnes pour la taille
-        this.infoPanel.add(onionTextField, gbc);
+        gbc.gridwidth = 1; // Largeur de 1 cellule
+        gbc.weighty = 1.0; // Poids vertical
+        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
+        infoPanel.add(onionTextField, gbc);
 
-        // Ajout du JLabel "Patates"
+        // Ajout du JLabel "Patates" et du JTextField associé
         gbc.gridx = 0; // Colonne 0
         gbc.gridy = 2; // Ligne 2
-        this.infoPanel.add(potatoLabel, gbc);
+        gbc.gridwidth = 2; // Largeur de 2 cellules
+        infoPanel.add(potatoLabel, gbc);
 
-        // Ajout du JTextField pour les patates
         gbc.gridx = 1; // Colonne 1
         gbc.gridy = 2; // Ligne 2
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Expansion horizontale
+        gbc.gridwidth = 1; // Largeur de 1 cellule
+        gbc.weighty = 1.0; // Poids vertical
+        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
+        infoPanel.add(potatoTextField, gbc);
+
+        // Ajout du bouton "+"
+        gbc.gridx = 0; // Colonne 0
+        gbc.gridy = 3; // Ligne 3
         gbc.weightx = 1.0; // Poids horizontal
-        potatoTextField.setColumns(7); // Définition du nombre de colonnes pour la taille
-        this.infoPanel.add(potatoTextField, gbc);
+        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
+        infoPanel.add(faster, gbc);
+
+        // Ajout du bouton "="
+        gbc.gridx = 1; // Colonne 1
+        gbc.gridy = 3; // Ligne 3
+        infoPanel.add(reset, gbc);
+
+        // Ajout du bouton "-"
+        gbc.gridx = 2; // Colonne 2
+        gbc.gridy = 3; // Ligne 3
+        infoPanel.add(slower, gbc);
 
         this.mainPanel.add(gridPanel, BorderLayout.CENTER);
         this.mainPanel.add(infoPanel, BorderLayout.EAST);
@@ -173,4 +288,6 @@ public class View extends JFrame implements Observer {
             }
         }
     }
+
+
 }
