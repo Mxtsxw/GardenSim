@@ -224,6 +224,8 @@ public class View extends JFrame implements Observer {
         gbc.weightx = 0.0; // Poids horizontal
         gbc.weighty = 1.0; // Poids vertical
         gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
+        tomatoTextField.setEditable(false); // Désactive le champ de texte
+        tomatoTextField.setText("   10  ");
         infoPanel.add(tomatoTextField, gbc);
 
         // Ajout du JLabel "Oignons" et du JTextField associé
@@ -237,6 +239,8 @@ public class View extends JFrame implements Observer {
         gbc.gridwidth = 1; // Largeur de 1 cellule
         gbc.weighty = 1.0; // Poids vertical
         gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
+        onionTextField.setEditable(false); // Désactive le champ de texte
+        onionTextField.setText("   10  ");
         infoPanel.add(onionTextField, gbc);
 
         // Ajout du JLabel "Patates" et du JTextField associé
@@ -250,6 +254,8 @@ public class View extends JFrame implements Observer {
         gbc.gridwidth = 1; // Largeur de 1 cellule
         gbc.weighty = 1.0; // Poids vertical
         gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
+        potatoTextField.setEditable(false); // Désactive le champ de texte
+        potatoTextField.setText("   10  ");
         infoPanel.add(potatoTextField, gbc);
 
         // Ajout du bouton "+"
