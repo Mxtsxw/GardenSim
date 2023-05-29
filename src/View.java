@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JScrollBar;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,15 +23,20 @@ public class View extends JFrame implements Observer {
     protected JLabel tomatoLabel;
     protected JLabel onionLabel;
     protected JLabel potatoLabel;
-    protected JTextField tomatoTextField;
-    protected JTextField onionTextField;
-    protected JTextField potatoTextField;
+    protected JTextArea tomatoTextArea;
+    protected JTextArea onionTextArea;
+    protected JTextArea potatoTextArea;
 
     private JMenuItem pauseMenuItem;
+
+    protected JScrollPane scrollPane;
+    protected JScrollBar scrollbar;
 
     protected JButton faster;
     protected JButton slower;
     protected JButton reset;
+
+    protected JPanel inventoryPanel;
 
     public View(Model m) {
         super();
@@ -39,11 +46,15 @@ public class View extends JFrame implements Observer {
         this.gridPanel = new JPanel(new GridLayout(10, 10));
         this.infoPanel = new JPanel(new GridBagLayout());
         this.tomatoLabel = new JLabel("Tomates :");
+        this.inventoryPanel = new JPanel(new GridBagLayout());
         this.onionLabel = new JLabel("Oignons :");
         this.potatoLabel = new JLabel("Patates :");
-        this.tomatoTextField = new JTextField();
-        this.onionTextField = new JTextField();
-        this.potatoTextField = new JTextField();
+        this.tomatoTextArea = new JTextArea();
+        this.tomatoTextArea.setText("   10");
+        this.onionTextArea = new JTextArea();
+        this.potatoTextArea = new JTextArea();
+        this.scrollbar=new JScrollBar();
+        scrollbar.setBounds(200,150,150,150);
         this.pauseMenuItem = new JMenuItem("Pause");
 
         build();
@@ -64,12 +75,15 @@ public class View extends JFrame implements Observer {
         this.mainPanel = new JPanel(new BorderLayout());
         this.gridPanel = new JPanel(new GridLayout(10, 10));
         this.infoPanel = new JPanel(new GridBagLayout());
+        this.inventoryPanel = new JPanel(new GridBagLayout());
         this.tomatoLabel = new JLabel("Tomates :");
         this.onionLabel = new JLabel("Oignons :");
         this.potatoLabel = new JLabel("Patates :");
-        this.tomatoTextField = new JTextField();
-        this.onionTextField = new JTextField();
-        this.potatoTextField = new JTextField();
+        this.tomatoTextArea = new JTextArea();
+        this.onionTextArea = new JTextArea();
+        this.potatoTextArea = new JTextArea();
+        this.scrollbar=new JScrollBar();
+        scrollbar.setBounds(200,150,150,150);
         this.pauseMenuItem = new JMenuItem("Pause");
 
         build();
@@ -205,7 +219,7 @@ public class View extends JFrame implements Observer {
         });
 
         // Modification de l'infoPanel en utilisant un GridBagLayout
-        infoPanel.setLayout(new GridBagLayout());
+        inventoryPanel.setLayout(new GridBagLayout());
 
         // Création des contraintes pour la disposition GridBagLayout
         GridBagConstraints gbc = new GridBagConstraints();
@@ -216,7 +230,7 @@ public class View extends JFrame implements Observer {
         gbc.gridx = 0; // Colonne 0
         gbc.gridy = 0; // Ligne 0
         gbc.gridwidth = 2; // Largeur de 2 cellules
-        infoPanel.add(tomatoLabel, gbc);
+        inventoryPanel.add(tomatoLabel,gbc);
 
         gbc.gridx = 1; // Colonne 1
         gbc.gridy = 0; // Ligne 0
@@ -224,59 +238,69 @@ public class View extends JFrame implements Observer {
         gbc.weightx = 0.0; // Poids horizontal
         gbc.weighty = 1.0; // Poids vertical
         gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
-        tomatoTextField.setEditable(false); // Désactive le champ de texte
-        tomatoTextField.setText("   10  ");
-        infoPanel.add(tomatoTextField, gbc);
+        tomatoTextArea.setEditable(false); // Désactive le champ de texte
+        inventoryPanel.add(tomatoTextArea,gbc);
+
 
         // Ajout du JLabel "Oignons" et du JTextField associé
         gbc.gridx = 0; // Colonne 0
         gbc.gridy = 1; // Ligne 1
         gbc.gridwidth = 2; // Largeur de 2 cellules
-        infoPanel.add(onionLabel, gbc);
+        inventoryPanel.add(onionLabel,gbc);
 
         gbc.gridx = 1; // Colonne 1
         gbc.gridy = 1; // Ligne 1
         gbc.gridwidth = 1; // Largeur de 1 cellule
         gbc.weighty = 1.0; // Poids vertical
         gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
-        onionTextField.setEditable(false); // Désactive le champ de texte
-        onionTextField.setText("   10  ");
-        infoPanel.add(onionTextField, gbc);
+        onionTextArea.setEditable(false); // Désactive le champ de texte
+        onionTextArea.setText("   10  ");
+        inventoryPanel.add(onionTextArea,gbc);
 
         // Ajout du JLabel "Patates" et du JTextField associé
         gbc.gridx = 0; // Colonne 0
         gbc.gridy = 2; // Ligne 2
         gbc.gridwidth = 2; // Largeur de 2 cellules
-        infoPanel.add(potatoLabel, gbc);
+        inventoryPanel.add(potatoLabel,gbc);
 
         gbc.gridx = 1; // Colonne 1
         gbc.gridy = 2; // Ligne 2
         gbc.gridwidth = 1; // Largeur de 1 cellule
         gbc.weighty = 1.0; // Poids vertical
         gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
-        potatoTextField.setEditable(false); // Désactive le champ de texte
-        potatoTextField.setText("   10  ");
-        infoPanel.add(potatoTextField, gbc);
+        potatoTextArea.setEditable(false); // Désactive le champ de texte
+        potatoTextArea.setText("   10  ");
+        inventoryPanel.add(potatoTextArea,gbc);
+/*
+        gbc.gridx = 0; // Colonne 0
+        gbc.gridy = 3; // Ligne 3
+        gbc.gridwidth = 2; // Largeur de 2 cellules
+        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
+        gbc.anchor = GridBagConstraints.CENTER; // Alignement au centre
+*/
 
         // Ajout du bouton "+"
         gbc.gridx = 0; // Colonne 0
-        gbc.gridy = 3; // Ligne 3
+        gbc.gridy = 4; // Ligne 4
         gbc.weightx = 1.0; // Poids horizontal
         gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
-        infoPanel.add(faster, gbc);
+        inventoryPanel.add(faster, gbc);
 
         // Ajout du bouton "="
         gbc.gridx = 1; // Colonne 1
-        gbc.gridy = 3; // Ligne 3
-        infoPanel.add(reset, gbc);
+        gbc.gridy = 4; // Ligne 4
+        inventoryPanel.add(reset, gbc);
 
         // Ajout du bouton "-"
         gbc.gridx = 2; // Colonne 2
-        gbc.gridy = 3; // Ligne 3
-        infoPanel.add(slower, gbc);
+        gbc.gridy = 4; // Ligne 4
+        inventoryPanel.add(slower, gbc);
 
+        //this.scrollPane = new JScrollPane(infoPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS ou _AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        this.scrollPane = new JScrollPane(inventoryPanel);
         this.mainPanel.add(gridPanel, BorderLayout.CENTER);
-        this.mainPanel.add(infoPanel, BorderLayout.EAST);
+        this.mainPanel.add(scrollPane, BorderLayout.EAST);
+        //this.mainPanel.add(infoPanel, BorderLayout.EAST);
         this.mainPanel.setBorder(blackLine);
 
         add(mainPanel);
