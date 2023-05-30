@@ -52,3 +52,4 @@ public class Model extends Observable implements Runnable {
         this.cooldown = i;
     }
 }
+
