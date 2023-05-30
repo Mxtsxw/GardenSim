@@ -1,17 +1,26 @@
 package Plants;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 public abstract class Plants {
 
     private String name;
-    private String thumbnail;
+    private BufferedImage image;
+    private Image icon;
+
     private int speedGerminationRate;
     private int collectTime;
 
-    public Plants(String name, String thumbnail, int speedGerminationRate, int collectTime) {
+    public Plants(String name, int speedGerminationRate, int collectTime) throws IOException {
         this.name = name;
-        this.thumbnail = thumbnail;
         this.speedGerminationRate = speedGerminationRate;
         this.collectTime = collectTime;
+        this.image = ImageIO.read(new File("./images/data.png")); // chargement de l'image globale
     }
 
     public String getName() {
@@ -22,12 +31,16 @@ public abstract class Plants {
         this.name = name;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
+    public void setIcon(int x, int y) {
+
+        image = image.getSubimage(x, y, 10, 10);
+
+        this.icon = this.image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+
     }
 
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
+    public Image getIcon() {
+        return icon;
     }
 
     public int getSpeedGerminationRate() {
