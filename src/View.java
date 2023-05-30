@@ -298,9 +298,9 @@ public class View extends JFrame implements Observer {
 
         //this.scrollPane = new JScrollPane(infoPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS ou _AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         this.scrollPane = new JScrollPane(inventoryPanel);
+        this.inventoryPanel.add(infoPanel);  //INFORMATIONS pour le moment je laisse ça comme ça, j'ai pas réussi à dissocier les boutons du scrollpane
         this.mainPanel.add(gridPanel, BorderLayout.CENTER);
         this.mainPanel.add(scrollPane, BorderLayout.EAST);
-        //this.mainPanel.add(infoPanel, BorderLayout.EAST);
         this.mainPanel.setBorder(blackLine);
 
         add(mainPanel);
