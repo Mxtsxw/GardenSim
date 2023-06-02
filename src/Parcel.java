@@ -1,3 +1,5 @@
+import Plants.Plants;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -6,14 +8,23 @@ import java.io.File;
 import java.io.IOException;
 
 public class Parcel extends JPanel {
-    private BufferedImage bgParcel;
+
+    private ImageIcon backgroundImage;
     private BufferedImage imagePlant;
 
-    public Parcel() throws IOException {
+    private Plants plant;
+    private int growthStage;
+
+    public Parcel(){
         super();
-        setBackground(Color.WHITE);
-        this.bgParcel = ImageIO.read(new File("/images/Terre.png"));
+
+        this.plant = null;
+        this.growthStage = 0;
         this.imagePlant = null;
+
+        setBackground(Color.WHITE);
+        backgroundImage = new ImageIcon(getClass().getResource("/resources/images/soilTexture.jpg"));
+
     }
 
     public BufferedImage getImagePlant() {
@@ -28,6 +39,9 @@ public class Parcel extends JPanel {
         this.imagePlant = null;
     }
 
+    /**
+     * Applique un filtre sur l'image de la plante.
+     */
     public void pourris() {
         if (imagePlant != null) {
             // Convertir l'image en niveaux de gris
@@ -52,8 +66,8 @@ public class Parcel extends JPanel {
         super.paintComponent(g);
 
         // Dessiner l'image de fond
-        if (bgParcel != null) {
-            g.drawImage(bgParcel, 0, 0, getWidth(), getHeight(), this);
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
         }
 
         // Dessiner l'image de la plante
