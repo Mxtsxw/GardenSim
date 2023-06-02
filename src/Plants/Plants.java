@@ -12,16 +12,20 @@ public abstract class Plants {
     private String name;
     private BufferedImage image;
     private Image icon;
-
     private int speedGerminationRate;
     private int collectTime;
 
-    public Plants(String name, int speedGerminationRate, int collectTime) throws IOException {
+    private int price;
+
+    public Plants(String name, int speedGerminationRate, int collectTime, int price) throws IOException {
         this.name = name;
         this.speedGerminationRate = speedGerminationRate;
         this.collectTime = collectTime;
         this.image = ImageIO.read(new File("./images/data.png")); // chargement de l'image globale
+        this.price=price;
     }
+
+    public int getPrice(){return price;}
 
     public String getName() {
         return name;
@@ -30,6 +34,8 @@ public abstract class Plants {
     public void setName(String name) {
         this.name = name;
     }
+
+    public void setCustomImage(String data) throws IOException {this.image = ImageIO.read(new File("./images/"+data+".png"));}
 
     public void setIcon(int x, int y) {
 
