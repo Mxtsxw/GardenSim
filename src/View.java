@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JMenu;
@@ -38,7 +39,7 @@ public class View extends JFrame implements Observer {
 
     protected JPanel inventoryPanel;
 
-    public View(Model m) {
+    public View(Model m) throws IOException {
         super();
 
         this.m = m;
@@ -68,7 +69,7 @@ public class View extends JFrame implements Observer {
         });
     }
 
-    public View() {
+    public View() throws IOException {
         super();
 
         this.m = new Model();
@@ -108,7 +109,7 @@ public class View extends JFrame implements Observer {
     /**
      * Gère la création des composants de l'interface utilisateur
      */
-    public void build() {
+    public void build() throws IOException {
         setTitle("Simulateur de Tomates");
         setSize(600, 400);
 

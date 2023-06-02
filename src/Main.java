@@ -1,4 +1,5 @@
 import javax.swing.SwingUtilities;
+import java.io.IOException;
 
 public class Main {
 
@@ -9,7 +10,12 @@ public class Main {
                 Model m = new Model();
 
                 // Initialisation de la vue
-                View view = new View(m);
+                View view = null;
+                try {
+                    view = new View(m);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
 
                 // Ajout d'un observer
                 m.addObserver(view);
