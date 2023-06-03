@@ -25,6 +25,7 @@ public abstract class Plants {
         this.price=price;
     }
 
+    // Getters
     public int getPrice(){return price;}
 
     public String getName() {

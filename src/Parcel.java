@@ -3,11 +3,13 @@ import Plants.Plants;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Parcel extends JPanel {
+public class Parcel extends JPanel implements MouseListener {
 
     private ImageIcon backgroundImage;
     private BufferedImage imagePlant;
@@ -22,7 +24,6 @@ public class Parcel extends JPanel {
         this.growthStage = 0;
         this.imagePlant = null;
 
-        setBackground(Color.WHITE);
         backgroundImage = new ImageIcon(getClass().getResource("/resources/images/soilTexture.jpg"));
 
     }
@@ -74,5 +75,30 @@ public class Parcel extends JPanel {
         if (imagePlant != null) {
             g.drawImage(imagePlant, 0, 0, getWidth(), getHeight(), this);
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        System.out.println("Parcel clicked at coordinates: " + e.getX() + ", " + e.getY());
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }

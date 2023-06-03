@@ -1,10 +1,21 @@
 import java.util.Observable;
 import java.util.Random;
 
+/**
+ * Classe représentant le modèle.
+ * @extends Observable : La modèle va notifier les autres classes abonné (notamment la view) lorsque le modèle est mise à jour.
+ * @implemtents Runnable : Permet de faire tourner le modèle dans un Thread en continue.
+ * @attributes :
+ *  - boolean[10][10] grid : Représente l'état du potager.
+ *  - boolean isPaused : Indique l'état du jeu (si il est en pause).
+ *  - int cooldown : Le taux de rafraichissement du modèle, par défaut à 1 seconde.
+ */
 public class Model extends Observable implements Runnable {
+
 
     protected boolean[][] grid;
     private boolean isPaused = false;
+    protected int cooldown = 1000;
 
     public Model(){
         this.grid = new boolean[10][10];
@@ -13,7 +24,6 @@ public class Model extends Observable implements Runnable {
     public Model(boolean[][] grid) {
         this.grid = grid;
     }
-    public int cooldown = 1000;
 
     public boolean isPaused() {
         return isPaused;
@@ -25,6 +35,21 @@ public class Model extends Observable implements Runnable {
         notifyObservers();
     }
 
+    public void setRefreshRate(int i) {
+        this.cooldown = i;
+    }
+
+    public void lowerRefreshRate(int i){
+        this.cooldown -= i;
+    }
+
+    public void increaseRefreshRate(int i){
+        this.cooldown += i;
+    }
+
+    /**
+     * Met à jours le modèle à chaque intervalle de temps selon le taux de rafraichissement
+     */
     @Override
     public void run() {
         while (true){
@@ -46,10 +71,6 @@ public class Model extends Observable implements Runnable {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    public void setRefreshRate(int i) {
-        this.cooldown = i;
     }
 }
 

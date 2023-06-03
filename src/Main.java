@@ -14,7 +14,7 @@ public class Main {
                 try {
                     view = new View(m);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
 
                 // Ajout d'un observer

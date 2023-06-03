@@ -17,10 +17,14 @@ import javax.swing.JButton;
 
 public class View extends JFrame implements Observer {
 
-    protected Model m;
+    protected Model model
+            ;
     protected JPanel mainPanel;
+
     protected JPanel gridPanel;
+
     protected JPanel infoPanel;
+
     protected JLabel tomatoLabel;
     protected JLabel onionLabel;
     protected JLabel potatoLabel;
@@ -39,10 +43,10 @@ public class View extends JFrame implements Observer {
 
     protected JPanel inventoryPanel;
 
-    public View(Model m) throws IOException {
+    public View(Model model) throws IOException {
         super();
 
-        this.m = m;
+        this.model = model;
         this.mainPanel = new JPanel(new BorderLayout());
         this.gridPanel = new JPanel(new GridLayout(10, 10));
         this.infoPanel = new JPanel(new GridBagLayout());
@@ -72,7 +76,7 @@ public class View extends JFrame implements Observer {
     public View() throws IOException {
         super();
 
-        this.m = new Model();
+        this.model = new Model();
         this.mainPanel = new JPanel(new BorderLayout());
         this.gridPanel = new JPanel(new GridLayout(10, 10));
         this.infoPanel = new JPanel(new GridBagLayout());
@@ -99,7 +103,7 @@ public class View extends JFrame implements Observer {
     }
 
     public void updatePauseMenuItem() {
-        if (m.isPaused()) {
+        if (model.isPaused()) {
             pauseMenuItem.setText("Play");
         } else {
             pauseMenuItem.setText("Pause");
@@ -185,12 +189,12 @@ public class View extends JFrame implements Observer {
         this.faster.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int tpsRefresh= m.cooldown - 500;
+                int tpsRefresh= model.cooldown - 500;
                 if (tpsRefresh<=100)
                 {
                     tpsRefresh= 100;
                 }
-                m.setRefreshRate(tpsRefresh);
+                model.setRefreshRate(tpsRefresh);
                 System.out.println(e);
                 // Ajoutez d'autres instructions à exécuter lorsque le bouton est cliqué
             }
@@ -199,7 +203,7 @@ public class View extends JFrame implements Observer {
         this.reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                m.setRefreshRate(1000);
+                model.setRefreshRate(1000);
                 System.out.println(e);
                 // Ajoutez d'autres instructions à exécuter lorsque le bouton est cliqué
             }
@@ -208,12 +212,12 @@ public class View extends JFrame implements Observer {
         this.slower.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int tpsRefresh= m.cooldown + 500;
+                int tpsRefresh= model.cooldown + 500;
                 if (tpsRefresh>=5000)
                 {
                     tpsRefresh= 5000;
                 }
-                m.setRefreshRate(tpsRefresh);
+                model.setRefreshRate(tpsRefresh);
                 System.out.println(e);
                 // Ajoutez d'autres instructions à exécuter lorsque le bouton est cliqué
             }
@@ -312,7 +316,7 @@ public class View extends JFrame implements Observer {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 int index = i * 10 + j;
-                if (m.grid[i][j])
+                if (model.grid[i][j])
                     this.gridPanel.getComponent(index).setBackground(Color.RED);
                 else
                     this.gridPanel.getComponent(index).setBackground(Color.WHITE);
