@@ -18,6 +18,9 @@ import javax.swing.JButton;
 public class View extends JFrame implements Observer {
 
     protected Model m;
+
+    protected JLabel moneyLabel;
+    protected JTextArea moneyLevel;
     protected JPanel mainPanel;
     protected JPanel gridPanel;
     protected JPanel infoPanel;
@@ -46,12 +49,13 @@ public class View extends JFrame implements Observer {
         this.mainPanel = new JPanel(new BorderLayout());
         this.gridPanel = new JPanel(new GridLayout(10, 10));
         this.infoPanel = new JPanel(new GridBagLayout());
+        this.moneyLabel = new JLabel("Argent :");
+        this.moneyLevel= new JTextArea();
         this.tomatoLabel = new JLabel("Tomates :");
         this.inventoryPanel = new JPanel(new GridBagLayout());
         this.onionLabel = new JLabel("Oignons :");
         this.potatoLabel = new JLabel("Patates :");
         this.tomatoTextArea = new JTextArea();
-        this.tomatoTextArea.setText("   10");
         this.onionTextArea = new JTextArea();
         this.potatoTextArea = new JTextArea();
         this.scrollbar=new JScrollBar();
@@ -77,6 +81,8 @@ public class View extends JFrame implements Observer {
         this.gridPanel = new JPanel(new GridLayout(10, 10));
         this.infoPanel = new JPanel(new GridBagLayout());
         this.inventoryPanel = new JPanel(new GridBagLayout());
+        this.moneyLabel = new JLabel("Argent :");
+        this.moneyLevel= new JTextArea();
         this.tomatoLabel = new JLabel("Tomates :");
         this.onionLabel = new JLabel("Oignons :");
         this.potatoLabel = new JLabel("Patates :");
@@ -273,11 +279,20 @@ public class View extends JFrame implements Observer {
         potatoTextArea.setText("   10  ");
         inventoryPanel.add(potatoTextArea,gbc);
 /*
+        // Ajout du JLabel "moneyLabel" et du JTextField associé
         gbc.gridx = 0; // Colonne 0
         gbc.gridy = 3; // Ligne 3
         gbc.gridwidth = 2; // Largeur de 2 cellules
+        inventoryPanel.add(moneyLabel,gbc);
+
+        gbc.gridx = 1; // Colonne 1
+        gbc.gridy = 3; // Ligne 3
+        gbc.gridwidth = 1; // Largeur de 1 cellule
+        gbc.weighty = 1.0; // Poids vertical
         gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
-        gbc.anchor = GridBagConstraints.CENTER; // Alignement au centre
+        potatoTextArea.setEditable(false); // Désactive le champ de texte
+        potatoTextArea.setText("   10  ");
+        inventoryPanel.add(moneyLevel,gbc);
 */
 
         // Ajout du bouton "+"

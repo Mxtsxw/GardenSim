@@ -6,12 +6,28 @@ public class Model extends Observable implements Runnable {
     protected boolean[][] grid;
     private boolean isPaused = false;
 
+    private int argent;
+
     public Model(){
         this.grid = new boolean[10][10];
+        this.argent=100;
     }
 
-    public Model(boolean[][] grid) {
+    public Model(boolean[][] grid, int argent) {
         this.grid = grid;
+        this.argent=argent;
+    }
+
+    public void augmentation(int x){
+        this.argent+=x;
+        setChanged();
+        notifyObservers();
+    }
+
+    public void diminution(int x){
+        this.argent-=x;
+        setChanged();
+        notifyObservers();
     }
     public int cooldown = 1000;
 
