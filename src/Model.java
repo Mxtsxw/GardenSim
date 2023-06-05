@@ -1,3 +1,5 @@
+import Plants.PlantNames;
+
 import java.util.Observable;
 import java.util.Random;
 
@@ -16,6 +18,7 @@ public class Model extends Observable implements Runnable {
     protected boolean[][] grid;
     private boolean isPaused = false;
     protected int cooldown = 1000;
+    private PlantNames selected = null;
 
     private int argent;
 
@@ -27,6 +30,14 @@ public class Model extends Observable implements Runnable {
     public Model(boolean[][] grid, int argent) {
         this.grid = grid;
         this.argent=argent;
+    }
+
+    public PlantNames getSelected() {
+        return selected;
+    }
+
+    public void setSelected(PlantNames selected) {
+        this.selected = selected;
     }
 
     public void augmentation(int x){

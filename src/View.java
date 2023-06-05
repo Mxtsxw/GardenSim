@@ -291,6 +291,8 @@ public class View extends JFrame implements Observer {
                     Cursor cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
                     label.setCursor(cursor);
 
+                    model.setSelected(p);
+
                     System.out.println("Label clicked: " + p);
                     // Add your desired logic here
                 }
