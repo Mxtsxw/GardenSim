@@ -16,7 +16,6 @@ public abstract class Plants {
 
     public static Image getImage(int x, int y) throws IOException {
         URL imageURL = Plants.class.getResource("/resources/images/data.png");
-        System.out.println(imageURL);
         BufferedImage bufferedImage = ImageIO.read(imageURL);
 
         int subX = 395 * x;

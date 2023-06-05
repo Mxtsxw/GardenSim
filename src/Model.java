@@ -1,4 +1,5 @@
 import Plants.PlantNames;
+import Plants.Plants;
 
 import java.util.Observable;
 import java.util.Random;
@@ -12,10 +13,10 @@ import java.util.Random;
  *  - boolean isPaused : Indique l'état du jeu (si il est en pause).
  *  - int cooldown : Le taux de rafraichissement du modèle, par défaut à 1 seconde.
  */
-public class Model extends Observable implements Runnable {
+public class Model extends Observable {
 
 
-    protected boolean[][] grid;
+    protected Plants[][] grid;
     private boolean isPaused = false;
     protected int cooldown = 1000;
     private PlantNames selected = null;
@@ -23,11 +24,11 @@ public class Model extends Observable implements Runnable {
     private int argent;
 
     public Model(){
-        this.grid = new boolean[10][10];
+        this.grid = new Plants[10][10];
         this.argent=100;
     }
 
-    public Model(boolean[][] grid, int argent) {
+    public Model(Plants[][] grid, int argent) {
         this.grid = grid;
         this.argent=argent;
     }
@@ -38,6 +39,13 @@ public class Model extends Observable implements Runnable {
 
     public void setSelected(PlantNames selected) {
         this.selected = selected;
+    }
+
+    public void setPlants(int i, int j, Plants plant){
+        this.grid[i][j] = plant;
+        System.out.println("Plante ajouté sur " + i + " " +j);
+        setChanged();
+        notifyObservers();
     }
 
     public void augmentation(int x){
@@ -78,30 +86,6 @@ public class Model extends Observable implements Runnable {
         if (this.cooldown > 5000) this.cooldown = 5000;
     }
 
-    /**
-     * Met à jours le modèle à chaque intervalle de temps selon le taux de rafraichissement
-     */
-    @Override
-    public void run() {
-        while (true){
-            Random random = new Random();
-
-            // Used to compute the probability of showing a cell
-            for(int i=0; i<10; i++)
-                for(int j=0; j<10; j++) {
-                    grid[i][j] = random.nextInt(3) == 0;
-                }
-
-            // Notify change
-            setChanged();
-            notifyObservers();
-
-            try {
-                Thread.sleep(this.cooldown);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+    // La fonction run va être déplacé dans la classe d'ordonnanceur.
 }
 

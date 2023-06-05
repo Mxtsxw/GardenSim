@@ -22,10 +22,6 @@ public class Main {
 
                 view.setVisible(true);
 
-                // Création d'un thread pour le rafraîchissement du modèle
-                Thread modelThread = new Thread(m);
-                modelThread.start();
-
             }
         });
     }
