@@ -10,6 +10,6 @@ public class Pineapple extends Plants {
     }
 
     public static Image getImage() throws IOException {
-        return Plants.getImage(7, 2);
+        return Plants.getImage(6, 2);
     }
 }

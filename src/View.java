@@ -369,7 +369,7 @@ public class View extends JFrame implements Observer {
             case PEPPER:
                 return Pepper.getImage();
             case PINEAPLE:
-                return Pineaple.getImage();
+                return Pineapple.getImage();
             case STRAWBERRIES:
                 return Strawberries.getImage();
             default:

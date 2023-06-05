@@ -10,6 +10,6 @@ public class Strawberries extends Plants {
     }
 
     public static Image getImage() throws IOException {
-        return Plants.getImage(1, 0);
+        return Plants.getImage(0, 2);
     }
 }
