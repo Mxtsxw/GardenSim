@@ -1,12 +1,15 @@
+import Plants.Aubergine;
+import Plants.Carrot;
+import Plants.PlantNames;
+import Plants.Salad;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.JFrame;
-import javax.swing.JScrollBar;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
@@ -17,50 +20,18 @@ import javax.swing.JButton;
 
 public class View extends JFrame implements Observer {
 
-    protected Model m;
-
-    protected JLabel moneyLabel;
-    protected JTextArea moneyLevel;
+    protected Model model;
+   
     protected JPanel mainPanel;
+
     protected JPanel gridPanel;
-    protected JPanel infoPanel;
-    protected JLabel tomatoLabel;
-    protected JLabel onionLabel;
-    protected JLabel potatoLabel;
-    protected JTextArea tomatoTextArea;
-    protected JTextArea onionTextArea;
-    protected JTextArea potatoTextArea;
 
-    private JMenuItem pauseMenuItem;
+    protected JMenuItem pauseMenuItem;
 
-    protected JScrollPane scrollPane;
-    protected JScrollBar scrollbar;
-
-    protected JButton faster;
-    protected JButton slower;
-    protected JButton reset;
-
-    protected JPanel inventoryPanel;
-
-    public View(Model m) throws IOException {
+    public View(Model model) throws IOException {
         super();
 
-        this.m = m;
-        this.mainPanel = new JPanel(new BorderLayout());
-        this.gridPanel = new JPanel(new GridLayout(10, 10));
-        this.infoPanel = new JPanel(new GridBagLayout());
-        this.moneyLabel = new JLabel("Argent :");
-        this.moneyLevel= new JTextArea();
-        this.tomatoLabel = new JLabel("Tomates :");
-        this.inventoryPanel = new JPanel(new GridBagLayout());
-        this.onionLabel = new JLabel("Oignons :");
-        this.potatoLabel = new JLabel("Patates :");
-        this.tomatoTextArea = new JTextArea();
-        this.onionTextArea = new JTextArea();
-        this.potatoTextArea = new JTextArea();
-        this.scrollbar=new JScrollBar();
-        scrollbar.setBounds(200,150,150,150);
-        this.pauseMenuItem = new JMenuItem("Pause");
+        this.model = model;
 
         build();
 
@@ -76,22 +47,7 @@ public class View extends JFrame implements Observer {
     public View() throws IOException {
         super();
 
-        this.m = new Model();
-        this.mainPanel = new JPanel(new BorderLayout());
-        this.gridPanel = new JPanel(new GridLayout(10, 10));
-        this.infoPanel = new JPanel(new GridBagLayout());
-        this.inventoryPanel = new JPanel(new GridBagLayout());
-        this.moneyLabel = new JLabel("Argent :");
-        this.moneyLevel= new JTextArea();
-        this.tomatoLabel = new JLabel("Tomates :");
-        this.onionLabel = new JLabel("Oignons :");
-        this.potatoLabel = new JLabel("Patates :");
-        this.tomatoTextArea = new JTextArea();
-        this.onionTextArea = new JTextArea();
-        this.potatoTextArea = new JTextArea();
-        this.scrollbar=new JScrollBar();
-        scrollbar.setBounds(200,150,150,150);
-        this.pauseMenuItem = new JMenuItem("Pause");
+        this.model = new Model();
 
         build();
 
@@ -104,8 +60,65 @@ public class View extends JFrame implements Observer {
         });
     }
 
+
+
+    /**
+     * Gère la création des composants de l'interface utilisateur
+     */
+    public void build() throws IOException {
+        // Initialise les JPanels
+        this.mainPanel = new JPanel(new BorderLayout());
+        this.gridPanel = new JPanel(new GridLayout(10, 10));
+
+        // Configuration du JFrame
+        this.setTitle("Simulateur de Tomates");
+        this.setSize(600, 400);
+
+        // Ajout de la barre de menu
+        JMenuBar menu = buildJMenuBar();
+        this.setJMenuBar(menu);
+
+        // Création du Panel pour la grille de parcel
+        this.gridPanel = buildParcelPanel();
+
+        // Boutons contrôle taux de rafraichissement
+        JPanel resfreshPanel = buildRefreshRateAction();
+
+        // Scroll Panel
+        JScrollPane seedSelector = buildScrollSelectionPanel();
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+
+        JPanel moneyPanel = buildMoney();
+
+        rightPanel.add(seedSelector);
+        rightPanel.add(moneyPanel);
+        rightPanel.add(resfreshPanel);
+
+        this.mainPanel.add(gridPanel, BorderLayout.CENTER);
+        this.mainPanel.add(rightPanel, BorderLayout.EAST);
+
+        this.mainPanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+;
+        this.add(mainPanel);
+    }
+
+    @Override
+    public void update(Observable obs, Object obj) {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                int index = i * 10 + j;
+                if (model.grid[i][j])
+                    this.gridPanel.getComponent(index).setBackground(Color.RED);
+                else
+                    this.gridPanel.getComponent(index).setBackground(Color.WHITE);
+            }
+        }
+    }
+
     public void updatePauseMenuItem() {
-        if (m.isPaused()) {
+        if (model.isPaused()) {
             pauseMenuItem.setText("Play");
         } else {
             pauseMenuItem.setText("Pause");
@@ -113,20 +126,10 @@ public class View extends JFrame implements Observer {
     }
 
     /**
-     * Gère la création des composants de l'interface utilisateur
+     * Retourne la barre de menu
+     * @return
      */
-    public void build() throws IOException {
-        setTitle("Simulateur de Tomates");
-        setSize(600, 400);
-
-        Border blackLine = BorderFactory.createLineBorder(Color.black, 1);
-
-        for (int i = 0; i < 100; i++) {
-            JComponent parcel = new Parcel();
-            parcel.setBorder(blackLine);
-            this.gridPanel.add(parcel);
-        }
-
+    public JMenuBar buildJMenuBar(){
         // Création de la barre de menu
         JMenuBar menuBar = new JMenuBar();
 
@@ -181,159 +184,123 @@ public class View extends JFrame implements Observer {
         // Ajout du menu "Plants" à la barre de menu
         menuBar.add(plantsMenu);
 
-        // Définition de la barre de menu pour la vue
-        this.setJMenuBar(menuBar);
-
-        slower = new JButton("-");
-        reset = new JButton("=");
-        faster = new JButton("+");
-
-        this.faster.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int tpsRefresh= m.cooldown - 500;
-                if (tpsRefresh<=100)
-                {
-                    tpsRefresh= 100;
-                }
-                m.setRefreshRate(tpsRefresh);
-                System.out.println(e);
-                // Ajoutez d'autres instructions à exécuter lorsque le bouton est cliqué
-            }
-        });
-
-        this.reset.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                m.setRefreshRate(1000);
-                System.out.println(e);
-                // Ajoutez d'autres instructions à exécuter lorsque le bouton est cliqué
-            }
-        });
-
-        this.slower.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int tpsRefresh= m.cooldown + 500;
-                if (tpsRefresh>=5000)
-                {
-                    tpsRefresh= 5000;
-                }
-                m.setRefreshRate(tpsRefresh);
-                System.out.println(e);
-                // Ajoutez d'autres instructions à exécuter lorsque le bouton est cliqué
-            }
-        });
-
-        // Modification de l'infoPanel en utilisant un GridBagLayout
-        inventoryPanel.setLayout(new GridBagLayout());
-
-        // Création des contraintes pour la disposition GridBagLayout
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.WEST; // Alignement à gauche
-        gbc.insets = new Insets(5, 5, 5, 5); // Espacement autour des composants
-
-        // Ajout du JLabel "Tomates" et du JTextField associé
-        gbc.gridx = 0; // Colonne 0
-        gbc.gridy = 0; // Ligne 0
-        gbc.gridwidth = 2; // Largeur de 2 cellules
-        inventoryPanel.add(tomatoLabel,gbc);
-
-        gbc.gridx = 1; // Colonne 1
-        gbc.gridy = 0; // Ligne 0
-        gbc.gridwidth = 1; // Largeur de 1 cellule
-        gbc.weightx = 0.0; // Poids horizontal
-        gbc.weighty = 1.0; // Poids vertical
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
-        tomatoTextArea.setEditable(false); // Désactive le champ de texte
-        inventoryPanel.add(tomatoTextArea,gbc);
-
-
-        // Ajout du JLabel "Oignons" et du JTextField associé
-        gbc.gridx = 0; // Colonne 0
-        gbc.gridy = 1; // Ligne 1
-        gbc.gridwidth = 2; // Largeur de 2 cellules
-        inventoryPanel.add(onionLabel,gbc);
-
-        gbc.gridx = 1; // Colonne 1
-        gbc.gridy = 1; // Ligne 1
-        gbc.gridwidth = 1; // Largeur de 1 cellule
-        gbc.weighty = 1.0; // Poids vertical
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
-        onionTextArea.setEditable(false); // Désactive le champ de texte
-        onionTextArea.setText("   10  ");
-        inventoryPanel.add(onionTextArea,gbc);
-
-        // Ajout du JLabel "Patates" et du JTextField associé
-        gbc.gridx = 0; // Colonne 0
-        gbc.gridy = 2; // Ligne 2
-        gbc.gridwidth = 2; // Largeur de 2 cellules
-        inventoryPanel.add(potatoLabel,gbc);
-
-        gbc.gridx = 1; // Colonne 1
-        gbc.gridy = 2; // Ligne 2
-        gbc.gridwidth = 1; // Largeur de 1 cellule
-        gbc.weighty = 1.0; // Poids vertical
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
-        potatoTextArea.setEditable(false); // Désactive le champ de texte
-        potatoTextArea.setText("   10  ");
-        inventoryPanel.add(potatoTextArea,gbc);
-/*
-        // Ajout du JLabel "moneyLabel" et du JTextField associé
-        gbc.gridx = 0; // Colonne 0
-        gbc.gridy = 3; // Ligne 3
-        gbc.gridwidth = 2; // Largeur de 2 cellules
-        inventoryPanel.add(moneyLabel,gbc);
-
-        gbc.gridx = 1; // Colonne 1
-        gbc.gridy = 3; // Ligne 3
-        gbc.gridwidth = 1; // Largeur de 1 cellule
-        gbc.weighty = 1.0; // Poids vertical
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
-        potatoTextArea.setEditable(false); // Désactive le champ de texte
-        potatoTextArea.setText("   10  ");
-        inventoryPanel.add(moneyLevel,gbc);
-*/
-
-        // Ajout du bouton "+"
-        gbc.gridx = 0; // Colonne 0
-        gbc.gridy = 4; // Ligne 4
-        gbc.weightx = 1.0; // Poids horizontal
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal
-        inventoryPanel.add(faster, gbc);
-
-        // Ajout du bouton "="
-        gbc.gridx = 1; // Colonne 1
-        gbc.gridy = 4; // Ligne 4
-        inventoryPanel.add(reset, gbc);
-
-        // Ajout du bouton "-"
-        gbc.gridx = 2; // Colonne 2
-        gbc.gridy = 4; // Ligne 4
-        inventoryPanel.add(slower, gbc);
-
-        //this.scrollPane = new JScrollPane(infoPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS ou _AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        this.scrollPane = new JScrollPane(inventoryPanel);
-        this.inventoryPanel.add(infoPanel);  //INFORMATIONS pour le moment je laisse ça comme ça, j'ai pas réussi à dissocier les boutons du scrollpane
-        this.mainPanel.add(gridPanel, BorderLayout.CENTER);
-        this.mainPanel.add(scrollPane, BorderLayout.EAST);
-        this.mainPanel.setBorder(blackLine);
-
-        add(mainPanel);
+        return menuBar;
     }
 
-    @Override
-    public void update(Observable obs, Object obj) {
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                int index = i * 10 + j;
-                if (m.grid[i][j])
-                    this.gridPanel.getComponent(index).setBackground(Color.RED);
-                else
-                    this.gridPanel.getComponent(index).setBackground(Color.WHITE);
+
+    public JPanel buildMoney(){
+        JPanel panel = new JPanel(new FlowLayout());
+        JLabel moneyLabel = new JLabel("Argent :");
+        JTextArea moneyLevel= new JTextArea();
+
+        panel.add(moneyLabel);
+        panel.add(moneyLevel);
+
+        return panel;
+    }
+
+    /**
+     * Retourne la section de jeu
+     * @return
+     */
+    public JPanel buildRefreshRateAction(){
+        JPanel panel = new JPanel(new FlowLayout());
+
+        JButton slower = new JButton("-");
+        JButton reset = new JButton("=");
+        JButton faster = new JButton("+");
+
+        faster.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.increaseRefreshRate(500);
+                System.out.println(e);
             }
+        });
+
+        reset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.setRefreshRate(1000);
+                System.out.println(e);
+                // Ajoutez d'autres instructions à exécuter lorsque le bouton est cliqué
+            }
+        });
+
+        slower.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.lowerRefreshRate(500);
+                System.out.println(e);
+            }
+        });
+
+        panel.add(faster);
+        panel.add(reset);
+        panel.add(slower);
+
+        return panel;
+    }
+
+    /**
+     * Retourne la grille de parcelles
+     * @return
+     */
+    public JPanel buildParcelPanel(){
+        JPanel panel = new JPanel(new GridLayout(10, 10));
+
+        Border blackLine = BorderFactory.createLineBorder(Color.black, 1);
+
+        for (int i = 0; i < 100; i++) {
+            JComponent parcel = new Parcel();
+
+            parcel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    System.out.println(e);
+                }
+            });
+            parcel.setBorder(blackLine);
+            panel.add(parcel);
+        }
+
+        return panel;
+    }
+
+    public JScrollPane buildScrollSelectionPanel(){
+        JPanel panel = new JPanel(new GridLayout(PlantNames.values().length, 2));
+
+
+        for (PlantNames p: PlantNames.values())
+        {
+            JLabel label = new JLabel();
+            label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            label.setPreferredSize(new Dimension(50, 50));
+            try {
+                label.setIcon(new ImageIcon(getSeedIcon(p)));
+            } catch (IOException e) {
+                label.setText(p.toString());
+                e.printStackTrace();
+            }
+
+            panel.add(label);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(panel);
+
+        return scrollPane;
+    }
+
+    public Image getSeedIcon(PlantNames name) throws IOException {
+        switch (name){
+            case CARROT:
+                return Carrot.getImage();
+            case SALAD:
+                return Salad.getImage();
+            case AUBERGINE:
+                return Aubergine.getImage();
+            default:
+                return ImageIO.read(new File("/resources/images/data.png"));
         }
     }
-
-
 }
