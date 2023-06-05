@@ -18,8 +18,23 @@ public abstract class Plants {
         URL imageURL = Plants.class.getResource("/resources/images/data.png");
         System.out.println(imageURL);
         BufferedImage bufferedImage = ImageIO.read(imageURL);
-        bufferedImage = bufferedImage.getSubimage(x, y, 10, 10);
-        return bufferedImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+
+        int subX = 395 * x;
+        int subY = 395 * y;
+        int subWidth = 150;
+        int subHeight = 150;
+
+        // Adjust subimage coordinates if they exceed image bounds
+        if (subX + subWidth > bufferedImage.getWidth()) {
+            subWidth = bufferedImage.getWidth() - subX;
+        }
+
+        if (subY + subHeight > bufferedImage.getHeight()) {
+            subHeight = bufferedImage.getHeight() - subY;
+        }
+
+        bufferedImage = bufferedImage.getSubimage(subX, subY, subWidth, subHeight);
+        return bufferedImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
     }
 
     public Plants(String name, int speedGerminationRate, int collectTime, int price) throws IOException {
