@@ -37,14 +37,18 @@ public class Model extends Observable implements Runnable {
 
     public void setRefreshRate(int i) {
         this.cooldown = i;
+        if (this.cooldown > 5000) this.cooldown = 5000;
+        if (this.cooldown < 100) this.cooldown = 100;
     }
 
     public void lowerRefreshRate(int i){
         this.cooldown -= i;
+        if (this.cooldown < 100) this.cooldown = 100;
     }
 
     public void increaseRefreshRate(int i){
         this.cooldown += i;
+        if (this.cooldown > 5000) this.cooldown = 5000;
     }
 
     /**

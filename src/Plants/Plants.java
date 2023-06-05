@@ -1,31 +1,36 @@
 package Plants;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 public abstract class Plants {
 
     private String name;
-    private BufferedImage image;
-    private Image icon;
     private int speedGerminationRate;
     private int collectTime;
-
     private int price;
+
+    public static Image getImage(int x, int y) throws IOException {
+        URL imageURL = Plants.class.getResource("/resources/images/data.png");
+        System.out.println(imageURL);
+        BufferedImage bufferedImage = ImageIO.read(imageURL);
+        bufferedImage = bufferedImage.getSubimage(x, y, 10, 10);
+        return bufferedImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+    }
 
     public Plants(String name, int speedGerminationRate, int collectTime, int price) throws IOException {
         this.name = name;
         this.speedGerminationRate = speedGerminationRate;
         this.collectTime = collectTime;
-        this.image = ImageIO.read(new File("./images/data.png")); // chargement de l'image globale
         this.price=price;
     }
 
-    // Getters
+    // Getters & Setters
+
     public int getPrice(){return price;}
 
     public String getName() {
@@ -34,20 +39,6 @@ public abstract class Plants {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setCustomImage(String data) throws IOException {this.image = ImageIO.read(new File("./images/"+data+".png"));}
-
-    public void setIcon(int x, int y) {
-
-        image = image.getSubimage(x, y, 10, 10);
-
-        this.icon = this.image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-
-    }
-
-    public Image getIcon() {
-        return icon;
     }
 
     public int getSpeedGerminationRate() {

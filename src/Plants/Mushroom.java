@@ -1,11 +1,15 @@
 package Plants;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class Mushroom extends Plants {
 
     public Mushroom() throws IOException {
         super("Champignon", 7, 2, 1);
-        super.setIcon(1,0);
+    }
+
+    public static Image getImage() throws IOException {
+        return Plants.getImage(1, 0);
     }
 }
