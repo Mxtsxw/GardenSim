@@ -195,17 +195,23 @@ public class View extends JFrame implements Observer {
         menuBar.add(fileMenu);
 
         // Création du menu "Plants"
-        JMenu plantsMenu = new JMenu("Plants");
+        JMenu plantsMenu = new JMenu("Météo");
 
         // Création des éléments du menu "Plants"
-        JMenuItem tomatoesItem = new JMenuItem("Tomates");
-        JMenuItem onionsItem = new JMenuItem("Oignons");
-        JMenuItem potatoesItem = new JMenuItem("Patates");
+        JMenuItem aleaItem = new JMenuItem("Aléatoire");
+        JMenuItem sunItem = new JMenuItem("Soleil");// mode de jeu normal sans altération
+        JMenuItem droughtItem = new JMenuItem("Sécheresse"); //case seche jaunis croissance complètement stopée
+        JMenuItem winterItem = new JMenuItem("Neige"); //case seche blanchie croissance retardée
+        JMenuItem rainItem = new JMenuItem("Pluvieux"); //case humide noircis croissance accélérée
+        JMenuItem bugItem = new JMenuItem("bug"); //les fruits disparaissent ou pourrissent directement
 
         // Ajout des éléments au menu "Plants"
-        plantsMenu.add(tomatoesItem);
-        plantsMenu.add(onionsItem);
-        plantsMenu.add(potatoesItem);
+        plantsMenu.add(aleaItem);
+        plantsMenu.add(sunItem);
+        plantsMenu.add(droughtItem);
+        plantsMenu.add(winterItem);
+        plantsMenu.add(rainItem);
+        plantsMenu.add(bugItem);
 
         // Ajout du menu "Plants" à la barre de menu
         menuBar.add(plantsMenu);
@@ -319,7 +325,7 @@ public class View extends JFrame implements Observer {
             JLabel label = new JLabel();
             label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
             label.setPreferredSize(new Dimension(50, 50));
-            label.setHorizontalAlignment(SwingConstants.CENTER);
+            //label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setVerticalAlignment(SwingConstants.CENTER);
             try {
                 label.setIcon(new ImageIcon(getSeedIcon(p)));
