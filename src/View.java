@@ -1,7 +1,4 @@
-import Plants.Aubergine;
-import Plants.Carrot;
-import Plants.PlantNames;
-import Plants.Salad;
+import Plants.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -314,7 +311,7 @@ public class View extends JFrame implements Observer {
     }
 
     public JScrollPane buildScrollSelectionPanel(){
-        JPanel panel = new JPanel(new GridLayout(PlantNames.values().length, 2));
+        JPanel panel = new JPanel(new GridLayout((PlantNames.values().length/2)+1, 2));
 
 
         for (PlantNames p: PlantNames.values())
@@ -322,12 +319,28 @@ public class View extends JFrame implements Observer {
             JLabel label = new JLabel();
             label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
             label.setPreferredSize(new Dimension(50, 50));
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+            label.setVerticalAlignment(SwingConstants.CENTER);
             try {
                 label.setIcon(new ImageIcon(getSeedIcon(p)));
             } catch (IOException e) {
                 label.setText(p.toString());
                 e.printStackTrace();
             }
+
+            // Mouse Listener
+            label.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    // Handle the mouse click event
+
+                    Cursor cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+                    label.setCursor(cursor);
+
+                    System.out.println("Label clicked: " + p);
+                    // Add your desired logic here
+                }
+            });
 
             panel.add(label);
         }
@@ -345,8 +358,22 @@ public class View extends JFrame implements Observer {
                 return Salad.getImage();
             case AUBERGINE:
                 return Aubergine.getImage();
+            case CAULIFLOWER:
+                return Cauliflower.getImage();
+            case CORN:
+                return Corn.getImage();
+            case MUSHROOM:
+                return Mushroom.getImage();
+            case ONION:
+                return Onion.getImage();
+            case PEPPER:
+                return Pepper.getImage();
+            case PINEAPLE:
+                return Pineaple.getImage();
+            case STRAWBERRIES:
+                return Strawberries.getImage();
             default:
-                return ImageIO.read(new File("/resources/images/data.png"));
+                return ImageIO.read(getClass().getResource("/resources/images/data.png"));
         }
     }
 }
