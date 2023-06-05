@@ -1,5 +1,6 @@
 import java.util.Observable;
 import java.util.Random;
+import java.io.Serializable;
 
 /**
  * Classe représentant le modèle.
@@ -10,7 +11,7 @@ import java.util.Random;
  *  - boolean isPaused : Indique l'état du jeu (si il est en pause).
  *  - int cooldown : Le taux de rafraichissement du modèle, par défaut à 1 seconde.
  */
-public class Model extends Observable implements Runnable {
+public class Model extends Observable implements Runnable, Serializable {
 
 
     protected boolean[][] grid;
@@ -27,6 +28,10 @@ public class Model extends Observable implements Runnable {
     public Model(boolean[][] grid, int argent) {
         this.grid = grid;
         this.argent=argent;
+    }
+
+    public String getStringArgent(){
+        return String.valueOf(this.argent);
     }
 
     public void augmentation(int x){

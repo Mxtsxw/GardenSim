@@ -26,7 +26,11 @@ public class View extends JFrame implements Observer {
 
     protected JPanel gridPanel;
 
+    protected JTextArea moneyLevel;
+
     protected JMenuItem pauseMenuItem;
+
+    protected ImageIcon moneyImage;
 
     public View(Model model) throws IOException {
         super();
@@ -115,6 +119,7 @@ public class View extends JFrame implements Observer {
                     this.gridPanel.getComponent(index).setBackground(Color.WHITE);
             }
         }
+        this.moneyLevel.setText(model.getStringArgent());
     }
 
     public void updatePauseMenuItem() {
@@ -139,11 +144,13 @@ public class View extends JFrame implements Observer {
         // Création des éléments du menu "Fichier"
         JMenuItem PauseItem = new JMenuItem("Pause");
         JMenuItem saveItem = new JMenuItem("Save");
+        JMenuItem loadItem = new JMenuItem("Load");
         JMenuItem exitItem = new JMenuItem("Quit");
 
         // Ajout des éléments au menu "Game"
         fileMenu.add(PauseItem);
         fileMenu.add(saveItem);
+        fileMenu.add(loadItem);
         fileMenu.addSeparator(); // Ajout d'un séparateur
         fileMenu.add(exitItem);
 
@@ -162,8 +169,30 @@ public class View extends JFrame implements Observer {
             }
         });
 
-        // Ajout de l'ActionListener à exitItem
+        ActionListener saveActionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                File directory = new File("./saves");
+                directory.mkdirs();
+                ModelSaver.saveModel(model,"./saves/saveGame");
+            }
+        };
+
+        ActionListener loadActionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Model loadedModel = ModelLoader.loadModel("./saves/saveGame");
+                if (loadedModel != null) {
+                    // Remplacer le modèle actif par le modèle chargé
+                    model = loadedModel;
+                }
+            }
+        };
+
+        // Ajout de l'ActionListener aux items
         exitItem.addActionListener(exitActionListener);
+        saveItem.addActionListener(saveActionListener);
+        loadItem.addActionListener(loadActionListener);
 
         // Ajout du menu "Game" à la barre de menu
         menuBar.add(fileMenu);
@@ -191,10 +220,27 @@ public class View extends JFrame implements Observer {
     public JPanel buildMoney(){
         JPanel panel = new JPanel(new FlowLayout());
         JLabel moneyLabel = new JLabel("Argent :");
-        JTextArea moneyLevel= new JTextArea();
+        this.moneyLevel= new JTextArea(model.getStringArgent());
+        moneyLevel.setEditable(false);
+        try {
+            this.moneyImage = new ImageIcon(getClass().getResource("/resources/images/Coin.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Définissez la taille souhaitée en pixels
+        int largeur = 35;
+        int hauteur = 35;
 
+        // Redimensionnez l'image en utilisant la méthode getImage() et getScaledInstance()
+        java.awt.Image imageRedimensionnee = this.moneyImage.getImage().getScaledInstance(largeur, hauteur, java.awt.Image.SCALE_SMOOTH);
+
+        // Créez une nouvelle instance de l'icône en utilisant l'image redimensionnée
+        this.moneyImage = new ImageIcon(imageRedimensionnee);
+        JLabel imageMoney= new JLabel();
+        imageMoney.setIcon(this.moneyImage);
         panel.add(moneyLabel);
         panel.add(moneyLevel);
+        panel.add(imageMoney);
 
         return panel;
     }
