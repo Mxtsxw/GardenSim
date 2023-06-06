@@ -28,6 +28,7 @@ public class View extends JFrame implements Observer {
     protected JMenuItem pauseMenuItem;
 
     protected ImageIcon moneyImage;
+    protected ImageIcon meteoImage;
 
     public View(Model model) throws IOException {
         super();
@@ -73,7 +74,7 @@ public class View extends JFrame implements Observer {
 
         // Configuration du JFrame
         this.setTitle("Simulateur de Tomates");
-        this.setSize(600, 400);
+        this.setSize(600, 500);
 
         // Ajout de la barre de menu
         JMenuBar menu = buildJMenuBar();
@@ -91,9 +92,15 @@ public class View extends JFrame implements Observer {
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 
-        JPanel moneyPanel = buildMoney();
 
+        //lignes pour l'argent et la météo
+        JPanel moneyPanel = buildMoney();
+        JPanel meteoPanel = buildMeteo();
+        JPanel boutiquePanel = buildboutique();
+
+        rightPanel.add(meteoPanel);
         rightPanel.add(seedSelector);
+        rightPanel.add(boutiquePanel);
         rightPanel.add(moneyPanel);
         rightPanel.add(resfreshPanel);
 
@@ -220,6 +227,33 @@ public class View extends JFrame implements Observer {
     }
 
 
+    public JPanel buildMeteo(){
+        JPanel panel = new JPanel(new FlowLayout());
+        JLabel meteoLabel = new JLabel("Météo :");
+
+        try {
+            this.meteoImage = new ImageIcon(getClass().getResource("/resources/images/cloud.png"));
+            //sun, hot, cold, cloud, bug
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Définissez la taille souhaitée en pixels
+        int largeur = 25;
+        int hauteur = 25;
+
+        // Redimensionnez l'image en utilisant la méthode getImage() et getScaledInstance()
+        java.awt.Image imageRedimensionnee = this.meteoImage.getImage().getScaledInstance(largeur, hauteur, java.awt.Image.SCALE_SMOOTH);
+
+        // Créez une nouvelle instance de l'icône en utilisant l'image redimensionnée
+        this.meteoImage = new ImageIcon(imageRedimensionnee);
+
+        JLabel meteoIcon= new JLabel();
+        meteoIcon.setIcon(this.meteoImage);
+        panel.add(meteoLabel);
+        panel.add(meteoIcon);
+        return panel;
+    }
+
     public JPanel buildMoney(){
         JPanel panel = new JPanel(new FlowLayout());
         JLabel moneyLabel = new JLabel("Argent :");
@@ -231,8 +265,8 @@ public class View extends JFrame implements Observer {
             e.printStackTrace();
         }
         // Définissez la taille souhaitée en pixels
-        int largeur = 35;
-        int hauteur = 35;
+        int largeur = 25;
+        int hauteur = 25;
 
         // Redimensionnez l'image en utilisant la méthode getImage() et getScaledInstance()
         java.awt.Image imageRedimensionnee = this.moneyImage.getImage().getScaledInstance(largeur, hauteur, java.awt.Image.SCALE_SMOOTH);
@@ -245,6 +279,28 @@ public class View extends JFrame implements Observer {
         panel.add(moneyLevel);
         panel.add(imageMoney);
 
+        return panel;
+    }
+
+    public JPanel buildboutique(){
+        JPanel panel = new JPanel(new FlowLayout());
+        JButton boutiqueButton = new JButton("Boutique");
+
+        boutiqueButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //code de l'ouverture de la boutique
+                System.out.println("ouverture de la boutique");
+            }
+        });
+        panel.add(boutiqueButton);
+        return panel;
+    }
+
+    public JPanel buildLabelTime(){
+        JPanel panel = new JPanel(new FlowLayout());
+        JLabel timeLabel = new JLabel("Temps :");
+        panel.add(timeLabel);
         return panel;
     }
 
@@ -318,7 +374,6 @@ public class View extends JFrame implements Observer {
 
     public JScrollPane buildScrollSelectionPanel(){
         JPanel panel = new JPanel(new GridLayout((PlantNames.values().length/2)+1, 2));
-
 
         for (PlantNames p: PlantNames.values())
         {
