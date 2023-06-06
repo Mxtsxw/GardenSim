@@ -412,7 +412,7 @@ public class View extends JFrame implements Observer {
             case PEPPER:
                 return new Pepper();
             case PINEAPLE:
-                return new Pineaple();
+                return new Pineapple();
             case STRAWBERRIES:
                 return new Strawberries();
             default:
