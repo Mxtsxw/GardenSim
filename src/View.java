@@ -25,7 +25,11 @@ public class View extends JFrame implements Observer {
 
     protected JPanel gridPanel;
 
+    protected JTextArea moneyLevel;
+
     protected JMenuItem pauseMenuItem;
+
+    protected ImageIcon moneyImage;
 
     public View(Model model) throws IOException {
         super();
@@ -117,6 +121,7 @@ public class View extends JFrame implements Observer {
 
             }
         }
+        this.moneyLevel.setText(model.getStringArgent());
     }
 
     public void updatePauseMenuItem() {
@@ -141,11 +146,13 @@ public class View extends JFrame implements Observer {
         // Création des éléments du menu "Fichier"
         JMenuItem PauseItem = new JMenuItem("Pause");
         JMenuItem saveItem = new JMenuItem("Save");
+        JMenuItem loadItem = new JMenuItem("Load");
         JMenuItem exitItem = new JMenuItem("Quit");
 
         // Ajout des éléments au menu "Game"
         fileMenu.add(PauseItem);
         fileMenu.add(saveItem);
+        fileMenu.add(loadItem);
         fileMenu.addSeparator(); // Ajout d'un séparateur
         fileMenu.add(exitItem);
 
@@ -164,24 +171,52 @@ public class View extends JFrame implements Observer {
             }
         });
 
-        // Ajout de l'ActionListener à exitItem
+        ActionListener saveActionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                File directory = new File("./saves");
+                directory.mkdirs();
+                ModelSaver.saveModel(model,"./saves/saveGame");
+            }
+        };
+
+        ActionListener loadActionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Model loadedModel = ModelLoader.loadModel("./saves/saveGame");
+                if (loadedModel != null) {
+                    // Remplacer le modèle actif par le modèle chargé
+                    model = loadedModel;
+                }
+            }
+        };
+
+        // Ajout de l'ActionListener aux items
         exitItem.addActionListener(exitActionListener);
+        saveItem.addActionListener(saveActionListener);
+        loadItem.addActionListener(loadActionListener);
 
         // Ajout du menu "Game" à la barre de menu
         menuBar.add(fileMenu);
 
         // Création du menu "Plants"
-        JMenu plantsMenu = new JMenu("Plants");
+        JMenu plantsMenu = new JMenu("Météo");
 
         // Création des éléments du menu "Plants"
-        JMenuItem tomatoesItem = new JMenuItem("Tomates");
-        JMenuItem onionsItem = new JMenuItem("Oignons");
-        JMenuItem potatoesItem = new JMenuItem("Patates");
+        JMenuItem aleaItem = new JMenuItem("Aléatoire");
+        JMenuItem sunItem = new JMenuItem("Soleil");// mode de jeu normal sans altération
+        JMenuItem droughtItem = new JMenuItem("Sécheresse"); //case seche jaunis croissance complètement stopée
+        JMenuItem winterItem = new JMenuItem("Neige"); //case seche blanchie croissance retardée
+        JMenuItem rainItem = new JMenuItem("Pluvieux"); //case humide noircis croissance accélérée
+        JMenuItem bugItem = new JMenuItem("bug"); //les fruits disparaissent ou pourrissent directement
 
         // Ajout des éléments au menu "Plants"
-        plantsMenu.add(tomatoesItem);
-        plantsMenu.add(onionsItem);
-        plantsMenu.add(potatoesItem);
+        plantsMenu.add(aleaItem);
+        plantsMenu.add(sunItem);
+        plantsMenu.add(droughtItem);
+        plantsMenu.add(winterItem);
+        plantsMenu.add(rainItem);
+        plantsMenu.add(bugItem);
 
         // Ajout du menu "Plants" à la barre de menu
         menuBar.add(plantsMenu);
@@ -193,10 +228,27 @@ public class View extends JFrame implements Observer {
     public JPanel buildMoney(){
         JPanel panel = new JPanel(new FlowLayout());
         JLabel moneyLabel = new JLabel("Argent :");
-        JTextArea moneyLevel= new JTextArea();
+        this.moneyLevel= new JTextArea(model.getStringArgent());
+        moneyLevel.setEditable(false);
+        try {
+            this.moneyImage = new ImageIcon(getClass().getResource("/resources/images/Coin.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Définissez la taille souhaitée en pixels
+        int largeur = 35;
+        int hauteur = 35;
 
+        // Redimensionnez l'image en utilisant la méthode getImage() et getScaledInstance()
+        java.awt.Image imageRedimensionnee = this.moneyImage.getImage().getScaledInstance(largeur, hauteur, java.awt.Image.SCALE_SMOOTH);
+
+        // Créez une nouvelle instance de l'icône en utilisant l'image redimensionnée
+        this.moneyImage = new ImageIcon(imageRedimensionnee);
+        JLabel imageMoney= new JLabel();
+        imageMoney.setIcon(this.moneyImage);
         panel.add(moneyLabel);
         panel.add(moneyLevel);
+        panel.add(imageMoney);
 
         return panel;
     }
@@ -283,7 +335,7 @@ public class View extends JFrame implements Observer {
             JLabel label = new JLabel();
             label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
             label.setPreferredSize(new Dimension(50, 50));
-            label.setHorizontalAlignment(SwingConstants.CENTER);
+            //label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setVerticalAlignment(SwingConstants.CENTER);
 
             try {
@@ -333,7 +385,7 @@ public class View extends JFrame implements Observer {
             case PEPPER:
                 return Pepper.getImage();
             case PINEAPLE:
-                return Pineaple.getImage();
+                return Pineapple.getImage();
             case STRAWBERRIES:
                 return Strawberries.getImage();
             default:

@@ -3,6 +3,7 @@ import Plants.Plants;
 
 import java.util.Observable;
 import java.util.Random;
+import java.io.Serializable;
 
 /**
  * Classe représentant le modèle.
@@ -13,7 +14,7 @@ import java.util.Random;
  *  - boolean isPaused : Indique l'état du jeu (si il est en pause).
  *  - int cooldown : Le taux de rafraichissement du modèle, par défaut à 1 seconde.
  */
-public class Model extends Observable {
+public class Model extends Observable implements Serializable {
 
 
     protected Plants[][] grid;
@@ -46,6 +47,10 @@ public class Model extends Observable {
         System.out.println("Plante ajouté sur " + i + " " +j);
         setChanged();
         notifyObservers();
+    }
+
+    public String getStringArgent(){
+        return String.valueOf(this.argent);
     }
 
     public void augmentation(int x){
