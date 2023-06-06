@@ -11,7 +11,7 @@ public enum PlantNames {
     MUSHROOM,
     ONION,
     PEPPER,
-    PINEAPLE,
+    PINEAPPLE,
     SALAD,
     STRAWBERRIES,
 }

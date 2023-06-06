@@ -6,10 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JMenu;
@@ -384,7 +382,7 @@ public class View extends JFrame implements Observer {
                 return Onion.getImage();
             case PEPPER:
                 return Pepper.getImage();
-            case PINEAPLE:
+            case PINEAPPLE:
                 return Pineapple.getImage();
             case STRAWBERRIES:
                 return Strawberries.getImage();
@@ -411,7 +409,7 @@ public class View extends JFrame implements Observer {
                 return new Onion();
             case PEPPER:
                 return new Pepper();
-            case PINEAPLE:
+            case PINEAPPLE:
                 return new Pineapple();
             case STRAWBERRIES:
                 return new Strawberries();
