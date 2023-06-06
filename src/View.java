@@ -105,7 +105,6 @@ public class View extends JFrame implements Observer {
 
     @Override
     public void update(Observable obs, Object obj) {
-        System.out.println("Update triggered");
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 int index = i * 10 + j;
@@ -118,7 +117,6 @@ public class View extends JFrame implements Observer {
 
             }
         }
-        System.out.println(Arrays.deepToString(model.grid));
     }
 
     public void updatePauseMenuItem() {
@@ -218,7 +216,6 @@ public class View extends JFrame implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 model.increaseRefreshRate(500);
-                System.out.println(e);
             }
         });
 
@@ -226,7 +223,6 @@ public class View extends JFrame implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 model.setRefreshRate(1000);
-                System.out.println(e);
                 // Ajoutez d'autres instructions à exécuter lorsque le bouton est cliqué
             }
         });
@@ -235,7 +231,6 @@ public class View extends JFrame implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 model.lowerRefreshRate(500);
-                System.out.println(e);
             }
         });
 
@@ -265,7 +260,6 @@ public class View extends JFrame implements Observer {
                     if (model.getSelected() != null){
                         try {
                             parcel.setImagePlant(getSeedIcon(model.getSelected()));
-                            System.out.println(getSeedIcon(model.getSelected()) + " added to " + parcel);
                             model.setPlants((int) finalI /10, finalI %10, getSeedClass(model.getSelected()));
                         } catch (IOException ioException) {
                             ioException.printStackTrace();
@@ -309,8 +303,6 @@ public class View extends JFrame implements Observer {
                     label.setCursor(cursor);
 
                     model.setSelected(p);
-
-                    System.out.println("Label clicked: " + p);
                 }
             });
 

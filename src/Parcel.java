@@ -20,7 +20,6 @@ public class Parcel extends JPanel{
         this.imagePlant = null;
 
         backgroundImage = new ImageIcon(getClass().getResource("/resources/images/soilTexture.jpg"));
-
     }
 
     public Image getImagePlant() {
@@ -60,7 +59,6 @@ public class Parcel extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        System.out.println(this.getImagePlant());
         // Dessiner l'image de fond
         if (backgroundImage != null) {
             g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
