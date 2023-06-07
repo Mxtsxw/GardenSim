@@ -45,8 +45,10 @@ public class Weather extends Observable {
         Thread thread = new Thread(() -> {
             while (true) {
                 try {
+                    Random rand = new Random();
+
                     updateMeteoState();
-                    Thread.sleep(3000); // Adjust the interval as needed
+                    Thread.sleep((rand.nextInt(15)+5)*1000); // Adjust the interval as needed
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
