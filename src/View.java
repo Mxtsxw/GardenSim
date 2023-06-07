@@ -428,6 +428,45 @@ public class View extends JFrame implements Observer {
         return panel;
     }
 
+    public JScrollPane buildScrollBoutiquePanel(){
+        JPanel panel = new JPanel(new GridLayout((PlantNames.values().length/2)+1, 2));
+
+        for (PlantNames p: PlantNames.values())
+        {
+            JLabel label = new JLabel();
+            label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            label.setPreferredSize(new Dimension(50, 50));
+            //label.setHorizontalAlignment(SwingConstants.CENTER);
+            label.setVerticalAlignment(SwingConstants.CENTER);
+            try {
+                label.setIcon(new ImageIcon(getSeedIcon(p)));
+            } catch (IOException e) {
+                label.setText(p.toString());
+                e.printStackTrace();
+            }
+
+            // Mouse Listener
+            label.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    // Handle the mouse click event
+
+                    Cursor cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+                    label.setCursor(cursor);
+
+                    System.out.println("Label clicked: " + p);
+                    // Add your desired logic here
+                }
+            });
+
+            panel.add(label);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(panel);
+
+        return scrollPane;
+    }
+
     public JScrollPane buildScrollSelectionPanel(){
         JPanel panel = new JPanel(new GridLayout((PlantNames.values().length/2)+1, 2));
 
