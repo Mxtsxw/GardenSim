@@ -264,7 +264,7 @@ public class View extends JFrame implements Observer {
         faster.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.increaseRefreshRate(500);
+                model.lowerRefreshRate(500);
             }
         });
 
@@ -279,7 +279,7 @@ public class View extends JFrame implements Observer {
         slower.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.lowerRefreshRate(500);
+                model.increaseRefreshRate(500);
             }
         });
 
