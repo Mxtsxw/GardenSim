@@ -435,8 +435,10 @@ public class View extends JFrame implements Observer {
                 public void mouseClicked(MouseEvent e) {
                     if (model.getSelected() != null){
                         try {
+                            Plants plant = getSeedClass(model.getSelected());
                             parcel.setImagePlant(getSeedIcon(model.getSelected()));
-                            model.setPlants((int) finalI /10, finalI %10, getSeedClass(model.getSelected()));
+                            model.setPlants((int) finalI /10, finalI %10, plant);
+                            parcel.setPlant(plant);
                         } catch (IOException ioException) {
                             ioException.printStackTrace();
                             model.setPlants(0, 0, null);

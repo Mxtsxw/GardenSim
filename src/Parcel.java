@@ -4,19 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Parcel extends JPanel{
+public class Parcel extends JPanel {
 
     private ImageIcon backgroundImage;
     private Image imagePlant;
 
     private Plants plant;
-    private int growthStage;
 
     public Parcel(){
         super();
 
         this.plant = null;
-        this.growthStage = 0;
         this.imagePlant = null;
 
         backgroundImage = new ImageIcon(getClass().getResource("/resources/images/soilTexture.jpg"));
@@ -28,6 +26,14 @@ public class Parcel extends JPanel{
 
     public void setImagePlant(Image image) {
         this.imagePlant = image;
+    }
+
+    public Plants getPlant() {
+        return plant;
+    }
+
+    public void setPlant(Plants plant) {
+        this.plant = plant;
     }
 
     public void reset() {
@@ -59,15 +65,40 @@ public class Parcel extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
         // Dessiner l'image de fond
         if (backgroundImage != null) {
             g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
         }
 
         // Dessiner l'image de la plante
-        if (imagePlant != null) {
-            g.drawImage(imagePlant, 0, 0, getWidth(), getHeight(), this);
+        if (imagePlant != null && plant != null) {
+            switch (this.plant.getGerminationState()){
+                case BEGINNING:
+                    drawScaledImage(g, 4);
+                    break;
+                case INTERMEDIATE:
+                    drawScaledImage(g, 3);
+                    break;
+                case ADVANCED:
+                    drawScaledImage(g, 2);
+                    break;
+                case GERMINATED:
+                    drawScaledImage(g, 1);
+                    break;
+                default:
+                    break;
+            }
         }
+    }
+
+    public void drawScaledImage(Graphics g, int ratio){
+        int scaledWidth = getWidth() / ratio;  // Adjust the scaling as needed
+        int scaledHeight = getHeight() / ratio;
+        int xPos = (getWidth() - scaledWidth) / ratio;  // Calculate the x position for centering
+        int yPos = (getHeight() - scaledHeight) / ratio;  // Calculate the y position for centering
+
+        g.drawImage(imagePlant, xPos, yPos, scaledWidth, scaledHeight, this);
     }
 
 }

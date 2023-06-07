@@ -1,3 +1,5 @@
+import Plants.Plants;
+
 public class Scheduler implements Runnable{
     Model model;
 
@@ -13,8 +15,7 @@ public class Scheduler implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            System.out.println("Clock");
+            this.model.UpdatePlants();
         }
     }
 }
