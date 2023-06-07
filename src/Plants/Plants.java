@@ -13,6 +13,17 @@ public abstract class Plants {
     private int speedGerminationRate;
     private int collectTime;
     private int price;
+    private int germinationCounter;
+    private GerminationState germinationState;
+
+    // Constructor, getters, and setters
+    public enum GerminationState {
+        BEGINNING,
+        INTERMEDIATE,
+        ADVANCED,
+        GERMINATED,
+        ROTTEN
+    }
 
     public static Image getImage(int x, int y) throws IOException {
         URL imageURL = Plants.class.getResource("/resources/images/data.png");
@@ -41,6 +52,8 @@ public abstract class Plants {
         this.speedGerminationRate = speedGerminationRate;
         this.collectTime = collectTime;
         this.price=price;
+        this.germinationCounter = 0;
+        this.germinationState = GerminationState.BEGINNING;
     }
 
     // Getters & Setters
@@ -69,5 +82,23 @@ public abstract class Plants {
 
     public void setCollectTime(int collectTime) {
         this.collectTime = collectTime;
+    }
+
+    public GerminationState getGerminationState() {
+        return germinationState;
+    }
+
+    public void updateGerminationState() {
+        germinationCounter++;
+
+        if (germinationCounter >= speedGerminationRate) {
+            germinationState = GerminationState.GERMINATED;
+        } else if (germinationCounter >= (speedGerminationRate * 0.5)) {
+            germinationState = GerminationState.ADVANCED;
+        } else if (germinationCounter >= (speedGerminationRate * 0.25)) {
+            germinationState = GerminationState.INTERMEDIATE;
+        } else {
+            germinationState = GerminationState.BEGINNING;
+        }
     }
 }

@@ -53,6 +53,10 @@ public class Model extends Observable implements Serializable {
         return String.valueOf(this.argent);
     }
 
+    public Plants[][] getGrid() {
+        return grid;
+    }
+
     public void augmentation(int x){
         this.argent+=x;
         setChanged();
