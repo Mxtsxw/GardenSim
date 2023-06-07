@@ -78,19 +78,6 @@ public class View extends JFrame implements Observer {
         });
     }
 
-   /* class CardMoney extends JPanel {
-        private JLabel moneyLabel;
-
-        public CardMoney(int money) {
-            moneyLabel = new JLabel("Argent: " + money);
-            add(moneyLabel);
-        }
-
-        public void updateMoney(int money) {
-            moneyLabel.setText("Argent: " + money);
-        }
-    }*/
-
     /**
      * Gère la création des composants de l'interface utilisateur
      */
