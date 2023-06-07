@@ -58,27 +58,22 @@ public class Weather extends Observable {
     }
 
     private void updateMeteoState() {
-        if (randomState){
+        if (randomState) {
             Random rand = new Random();
-            int aleaMeteo = rand.nextInt(3) + 1;
+            int aleaMeteo = rand.nextInt(10) + 1;  // Generate a random number between 1 and 10
 
-            switch (aleaMeteo){
-                case 1 :
-                    this.meteoState = WeatherNames.SOLEIL;
-                    this.ratio = 1;
-                    break;
-                case 2 :
-                    this.meteoState = WeatherNames.SECHERESSE;
-                    this.ratio = 0;
-                    break;
-                case 3 :
-                    this.meteoState = WeatherNames.NEIGE;
-                    this.ratio = 0.5;
-                    break;
-                case 4 :
-                    this.meteoState = WeatherNames.PLUVIEUX;
-                    this.ratio = 2;
-                    break;
+            if (aleaMeteo <= 2) {  // 20% chance for PLUVIEUX
+                this.meteoState = WeatherNames.PLUVIEUX;
+                this.ratio = 2;
+            } else if (aleaMeteo <= 6) {  // 40% chance for SOLEIL
+                this.meteoState = WeatherNames.SOLEIL;
+                this.ratio = 1;
+            } else if (aleaMeteo <= 8) {  // 20% chance for NEIGE
+                this.meteoState = WeatherNames.NEIGE;
+                this.ratio = 0.5;
+            } else {  // 20% chance for SECHERESSE
+                this.meteoState = WeatherNames.SECHERESSE;
+                this.ratio = 0;
             }
         }
 
