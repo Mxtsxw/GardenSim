@@ -53,10 +53,6 @@ public class Model extends Observable implements Serializable {
         return String.valueOf(this.argent);
     }
 
-    public Plants[][] getGrid() {
-        return grid;
-    }
-
     public void augmentation(int x){
         this.argent+=x;
         setChanged();
@@ -97,6 +93,18 @@ public class Model extends Observable implements Serializable {
 
     public int getCooldown() {
         return cooldown;
+    }
+
+    public void UpdatePlants() {
+        for (int i = 0; i < this.grid.length; i++) {
+            for (int j = 0; j < this.grid.length; j++) {
+                if (this.grid[i][j] != null){
+                    this.grid[i][j].updateGerminationState();
+                }
+            }
+        }
+        setChanged();
+        notifyObservers();
     }
 
     // La fonction run va être déplacé dans la classe d'ordonnanceur.

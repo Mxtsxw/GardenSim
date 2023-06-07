@@ -12,7 +12,7 @@ public abstract class Plants {
     private String name;
     private int speedGerminationRate;
     private int collectTime;
-    private int price;
+    private static int price;
     private int germinationCounter;
     private GerminationState germinationState;
 
@@ -58,7 +58,7 @@ public abstract class Plants {
 
     // Getters & Setters
 
-    public int getPrice(){return price;}
+    public static int getPrice(){return price;}
 
     public String getName() {
         return name;
