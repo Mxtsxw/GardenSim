@@ -3,10 +3,8 @@ package Plants;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.invoke.SwitchPoint;
 import java.net.URL;
 
 public abstract class Plants implements Serializable {
@@ -118,9 +116,8 @@ public abstract class Plants implements Serializable {
         return germinationState;
     }
 
-    public void updateGerminationState(Meteo meteo) {
-        double ratio = meteo.getRatio();
-        germinationCounter++;
+    public void updateGerminationState(double additionalRate) {
+        germinationCounter = (int) (germinationCounter + 1 * additionalRate);
 
         if (germinationCounter >= speedGerminationRate) {
             germinationState = GerminationState.GERMINATED;

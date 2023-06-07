@@ -65,7 +65,7 @@ public class View extends JFrame implements Observer {
     public View() throws IOException {
         super();
 
-        this.model = new Model();
+        this.model = new Model(new Weather());
 
         build();
 
@@ -127,7 +127,6 @@ public class View extends JFrame implements Observer {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
         }
 
@@ -139,7 +138,7 @@ public class View extends JFrame implements Observer {
         updateLabels();
 
         System.out.println(model.getMeteo());
-        System.out.println(this.model.getMeteo().getMeteoState());
+        System.out.println(this.model.getMeteo().getWeatherState());
     }
 
     public void updatePauseMenuItem() {
@@ -234,7 +233,7 @@ public class View extends JFrame implements Observer {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Mise a jour météo from vue");
-                model.setMeteo(Meteo.MeteoNames.ALEATOIRE);
+                model.setWeather(Weather.WeatherNames.ALEATOIRE);
 
             }
         });
@@ -242,28 +241,28 @@ public class View extends JFrame implements Observer {
         sunItem.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                model.setMeteo(Meteo.MeteoNames.SOLEIL);
+                model.setWeather(Weather.WeatherNames.SOLEIL);
             }
         });
 
         droughtItem.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                model.setMeteo(Meteo.MeteoNames.SECHERESSE);
+                model.setWeather(Weather.WeatherNames.SECHERESSE);
             }
         });
 
         winterItem.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                model.setMeteo(Meteo.MeteoNames.NEIGE);
+                model.setWeather(Weather.WeatherNames.NEIGE);
             }
         });
 
         rainItem.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                model.setMeteo(Meteo.MeteoNames.PLUVIEUX);
+                model.setWeather(Weather.WeatherNames.PLUVIEUX);
             }
         });
 

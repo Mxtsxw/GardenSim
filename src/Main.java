@@ -1,3 +1,5 @@
+import com.sun.source.tree.WhileLoopTree;
+
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import java.awt.*;
@@ -9,8 +11,11 @@ public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
+                // Initialisation de la Météo
+                Weather weather = new Weather();
+
                 // Initialisation du modèle
-                Model m = new Model();
+                Model m = new Model(weather);
 
                 // Initialisation de la vue
                 View view = null;
@@ -22,6 +27,7 @@ public class Main {
 
                 // Ajout d'un observer
                 m.addObserver(view);
+                weather.addObserver(view);
 
                 // Création du curseur personnalisé
                 Image cursorImage = null;
