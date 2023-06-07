@@ -101,7 +101,6 @@ public class View extends JFrame implements Observer {
         this.mainPanel.add(rightPanel, BorderLayout.EAST);
 
         this.mainPanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-;
         this.add(mainPanel);
     }
 
