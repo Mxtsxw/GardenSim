@@ -1,4 +1,5 @@
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Observable;
@@ -35,6 +36,9 @@ public class Weather extends Observable {
     public void setWeatherState(WeatherNames meteoState) {
         this.meteoState = meteoState;
         this.ratio = getWeatherRatio(meteoState);
+
+        setChanged();
+        notifyObservers(this);
     }
 
     public void startUpdatingMeteoState() {
@@ -75,6 +79,9 @@ public class Weather extends Observable {
                     break;
             }
         }
+
+        setChanged();
+        notifyObservers(this);
     }
 
     public static double getWeatherRatio(WeatherNames name) {
@@ -92,18 +99,18 @@ public class Weather extends Observable {
         }
     }
 
-    public static Image getWeatherIcon(WeatherNames name) throws IOException {
+    public static ImageIcon getWeatherIcon(WeatherNames name) throws IOException {
         switch (name) {
             case SOLEIL:
-                return ImageIO.read(Weather.class.getResource("/resources/images/sun.png"));
+                return new ImageIcon(Weather.class.getResource("/resources/images/sun.png"));
             case SECHERESSE:
-                return ImageIO.read(Weather.class.getResource("/resources/images/hot.png"));
+                return new ImageIcon(Weather.class.getResource("/resources/images/hot.png"));
             case NEIGE:
-                return ImageIO.read(Weather.class.getResource("/resources/images/cold.png"));
+                return new ImageIcon(Weather.class.getResource("/resources/images/cold.png"));
             case PLUVIEUX:
-                return ImageIO.read(Weather.class.getResource("/resources/images/cloud.png"));
+                return new ImageIcon(Weather.class.getResource("/resources/images/cloud.png"));
             default:
-                return ImageIO.read(Weather.class.getResource("/resources/images/sun.png"));
+                return new ImageIcon(Weather.class.getResource("/resources/images/sun.png"));
         }
     }
 }

@@ -45,6 +45,7 @@ public class View extends JFrame implements Observer {
     private JLabel selectedLabel;
 
     protected Inventory inventaire = new Inventory();
+    private JLabel meteoIcon;
 
     public View(Model model) throws IOException {
         super();
@@ -137,6 +138,12 @@ public class View extends JFrame implements Observer {
 
             //mise à jour de l'affichage de l'inventaire
             updateLabels();
+        }
+
+        if (obs instanceof Weather){
+            updateMeteoLabel();
+            System.out.println("Weather updated");
+            System.out.println(((Weather) obs).getWeatherState());
         }
     }
 
@@ -339,8 +346,16 @@ public class View extends JFrame implements Observer {
         JPanel panel = new JPanel(new FlowLayout());
         JLabel meteoLabel = new JLabel("Météo :");
 
+        meteoIcon= new JLabel();
+        updateMeteoLabel();
+        panel.add(meteoLabel);
+        panel.add(meteoIcon);
+        return panel;
+    }
+
+    private void updateMeteoLabel() {
         try {
-            this.meteoImage = new ImageIcon(getClass().getResource("/resources/images/cloud.png"));
+            this.meteoImage = Weather.getWeatherIcon(model.getMeteo().getWeatherState());
             //sun, hot, cold, cloud, bug
         } catch (Exception e) {
             e.printStackTrace();
@@ -350,16 +365,10 @@ public class View extends JFrame implements Observer {
         int hauteur = 25;
 
         // Redimensionnez l'image en utilisant la méthode getImage() et getScaledInstance()
-        java.awt.Image imageRedimensionnee = this.meteoImage.getImage().getScaledInstance(largeur, hauteur, java.awt.Image.SCALE_SMOOTH);
+        Image imageRedimensionnee = this.meteoImage.getImage().getScaledInstance(largeur, hauteur, Image.SCALE_SMOOTH);
 
         // Créez une nouvelle instance de l'icône en utilisant l'image redimensionnée
-        this.meteoImage = new ImageIcon(imageRedimensionnee);
-
-        JLabel meteoIcon= new JLabel();
-        meteoIcon.setIcon(this.meteoImage);
-        panel.add(meteoLabel);
-        panel.add(meteoIcon);
-        return panel;
+        meteoIcon.setIcon(new ImageIcon(imageRedimensionnee));
     }
 
     public JPanel buildMoney(int money){
