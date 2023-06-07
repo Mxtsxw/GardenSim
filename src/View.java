@@ -21,6 +21,11 @@ public class View extends JFrame implements Observer {
    
     protected JPanel mainPanel;
 
+    protected JPanel rightPanel;
+
+    protected CardLayout card;
+    protected JPanel cardPanel;
+
     protected JPanel gridPanel;
 
     protected JTextArea moneyLevel;
@@ -29,6 +34,8 @@ public class View extends JFrame implements Observer {
 
     protected ImageIcon moneyImage;
     protected ImageIcon meteoImage;
+
+    private boolean isOpenedBoutique;
 
     public View(Model model) throws IOException {
         super();
@@ -72,6 +79,11 @@ public class View extends JFrame implements Observer {
         this.mainPanel = new JPanel(new BorderLayout());
         this.gridPanel = new JPanel(new GridLayout(10, 10));
 
+        // Initialisation du cardlayout
+        this.card = new CardLayout();
+        cardPanel= new JPanel();
+        cardPanel.setLayout(card);
+
         // Configuration du JFrame
         this.setTitle("Simulateur de Tomates");
         this.setSize(600, 500);
@@ -83,29 +95,14 @@ public class View extends JFrame implements Observer {
         // Création du Panel pour la grille de parcel
         this.gridPanel = buildParcelPanel();
 
-        // Boutons contrôle taux de rafraichissement
-        JPanel resfreshPanel = buildRefreshRateAction();
+        //par défaut on affiche l'infoPanel, sinon on affiche boutiquePanel
+        this.rightPanel = buildInfoPanel();
+        cardPanel.add("INFO",this.rightPanel);
+        JPanel rightPanel2= buildBoutiquePanel();
+        cardPanel.add("BOUTIQUE",rightPanel2);
 
-        // Scroll Panel
-        JScrollPane seedSelector = buildScrollSelectionPanel();
-
-        JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-
-
-        //lignes pour l'argent et la météo
-        JPanel moneyPanel = buildMoney();
-        JPanel meteoPanel = buildMeteo();
-        JPanel boutiquePanel = buildboutique();
-
-        rightPanel.add(meteoPanel);
-        rightPanel.add(seedSelector);
-        rightPanel.add(boutiquePanel);
-        rightPanel.add(moneyPanel);
-        rightPanel.add(resfreshPanel);
-
-        this.mainPanel.add(gridPanel, BorderLayout.CENTER);
-        this.mainPanel.add(rightPanel, BorderLayout.EAST);
+        this.mainPanel.add(this.gridPanel, BorderLayout.CENTER);
+        this.mainPanel.add(cardPanel, BorderLayout.EAST);
 
         this.mainPanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 ;
@@ -114,6 +111,7 @@ public class View extends JFrame implements Observer {
 
     @Override
     public void update(Observable obs, Object obj) {
+        //mise à jour de la grille
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 int index = i * 10 + j;
@@ -123,7 +121,10 @@ public class View extends JFrame implements Observer {
                     this.gridPanel.getComponent(index).setBackground(Color.WHITE);
             }
         }
+
+        //mise à jour du reste
         this.moneyLevel.setText(model.getStringArgent());
+
     }
 
     public void updatePauseMenuItem() {
@@ -226,7 +227,54 @@ public class View extends JFrame implements Observer {
         return menuBar;
     }
 
+    public JPanel buildBoutiquePanel(){
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
+        // Boutons contrôle taux de rafraichissement
+        JPanel resfreshPanel = buildRefreshRateAction();
+
+        // Scroll Panel
+        JScrollPane boutiqueScrollPane = buildScrollSelectionPanel();
+
+        //lignes pour l'argent, la météo et le label de vitesse du jeu
+        JPanel moneyPanel = buildMoney();
+        JPanel boutiqueButton = buildButtonBoutique("retour"); //fermeture
+        JPanel timePanel = buildLabelTime();
+
+        panel.add(boutiqueScrollPane);
+        panel.add(boutiqueButton);
+        panel.add(moneyPanel);
+        panel.add(timePanel);
+        panel.add(resfreshPanel);
+
+        return panel;
+    }
+    public JPanel buildInfoPanel(){
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        // Boutons contrôle taux de rafraichissement
+        JPanel resfreshPanel = buildRefreshRateAction();
+
+        // Scroll Panel
+        JScrollPane seedSelector = buildScrollSelectionPanel();
+
+        //lignes pour l'argent, la météo et le label de vitesse du jeu
+        JPanel moneyPanel = buildMoney();
+        JPanel meteoPanel = buildMeteo();
+        JPanel boutiqueButton = buildButtonBoutique("boutique"); //ouverture
+        JPanel timePanel = buildLabelTime();
+
+        panel.add(meteoPanel);
+        panel.add(seedSelector);
+        panel.add(boutiqueButton);
+        panel.add(moneyPanel);
+        panel.add(timePanel);
+        panel.add(resfreshPanel);
+
+        return panel;
+    }
     public JPanel buildMeteo(){
         JPanel panel = new JPanel(new FlowLayout());
         JLabel meteoLabel = new JLabel("Météo :");
@@ -282,15 +330,23 @@ public class View extends JFrame implements Observer {
         return panel;
     }
 
-    public JPanel buildboutique(){
+    public JPanel buildButtonBoutique(String message){
         JPanel panel = new JPanel(new FlowLayout());
-        JButton boutiqueButton = new JButton("Boutique");
+        JButton boutiqueButton = new JButton(message);
 
         boutiqueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //code de l'ouverture de la boutique
-                System.out.println("ouverture de la boutique");
+                if (message=="boutique")
+                {
+                    card.show(cardPanel,"BOUTIQUE");
+                    System.out.println("ouverture de la boutique");
+                }
+                else
+                {
+                    card.show(cardPanel, "INFO");
+                    System.out.println("fermeture de la boutique");
+                }
             }
         });
         panel.add(boutiqueButton);
@@ -299,7 +355,7 @@ public class View extends JFrame implements Observer {
 
     public JPanel buildLabelTime(){
         JPanel panel = new JPanel(new FlowLayout());
-        JLabel timeLabel = new JLabel("Temps :");
+        JLabel timeLabel = new JLabel("Vitesse du jeu :");
         panel.add(timeLabel);
         return panel;
     }
