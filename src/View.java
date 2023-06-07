@@ -8,13 +8,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JButton;
-import java.util.Random;
 
 public class View extends JFrame implements Observer {
 
@@ -24,8 +22,12 @@ public class View extends JFrame implements Observer {
 
     protected JPanel rightPanel;
 
+    protected JScrollPane seedSelector;
+
     protected CardLayout card;
     protected JPanel cardPanel;
+
+    protected Map<PlantNames, JLabel> labelMap;
 
     protected JPanel cardContainer;
 
@@ -40,7 +42,7 @@ public class View extends JFrame implements Observer {
     protected ImageIcon moneyImage;
     protected ImageIcon meteoImage;
 
-    private boolean isOpenedBoutique;
+    protected Inventory inventaire = new Inventory();
 
     public View(Model model) throws IOException {
         super();
@@ -143,6 +145,9 @@ public class View extends JFrame implements Observer {
         //mise à jour de l'argent
         //this.moneyLevel.setText(model.getStringArgent());
         this.moneyLabel.setText("Argent: "+model.getStringArgent());
+
+        //mise à jour de l'affichage de l'inventaire
+        updateLabels();
 
         System.out.println(model.getMeteo());
         System.out.println(this.model.getMeteo().getMeteoState());
@@ -326,10 +331,10 @@ public class View extends JFrame implements Observer {
         JPanel resfreshPanel = buildRefreshRateAction();
 
         // Scroll Panel
-        JScrollPane seedSelector = buildScrollSelectionPanel();
+        seedSelector = buildScrollSelectionPanel();
 
         //lignes pour l'argent, la météo et le label de vitesse du jeu
-        JPanel moneyPanel = buildMoney(money);
+        //JPanel moneyPanel = buildMoney(money);
         JPanel meteoPanel = buildMeteo();
         JPanel boutiqueButton = buildButtonBoutique("boutique"); //ouverture
         JPanel timePanel = buildLabelTime();
@@ -337,7 +342,7 @@ public class View extends JFrame implements Observer {
         panel.add(meteoPanel);
         panel.add(seedSelector);
         panel.add(boutiqueButton);
-        panel.add(moneyPanel);
+        //panel.add(moneyPanel);
         panel.add(timePanel);
         panel.add(resfreshPanel);
 
@@ -509,13 +514,19 @@ public class View extends JFrame implements Observer {
     public JScrollPane buildScrollSelectionPanel(){
         JPanel panel = new JPanel(new GridLayout((PlantNames.values().length/2), 2));
 
+        // Create a map to store the labels for each plant
+        this.labelMap = new HashMap<>();
+
         for (PlantNames p: PlantNames.values())
         {
-            JLabel label = new JLabel();
+            JLabel label = new JLabel(String.valueOf(inventaire.getNombrePlantes(p)));
             label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
             label.setPreferredSize(new Dimension(50, 50));
             //label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setVerticalAlignment(SwingConstants.CENTER);
+
+            // ajout du label à la map
+            this.labelMap.put(p, label);
 
             try {
                 label.setIcon(new ImageIcon(getSeedIcon(p)));
@@ -532,8 +543,16 @@ public class View extends JFrame implements Observer {
 
                     Cursor cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
                     label.setCursor(cursor);
+                    System.out.println(inventaire.getNombrePlantes(p));
+                    if (inventaire.getNombrePlantes(p)>0) {
+                        model.setSelected(p);
+                        System.out.println("Plante selectionnée");
+                    }
+                    else {
+                        System.out.println("Vous n'avez pas de graines!");
+                        model.resetSelection();
+                    }
 
-                    model.setSelected(p);
                 }
             });
 
@@ -544,6 +563,16 @@ public class View extends JFrame implements Observer {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         return scrollPane;
+    }
+
+    // Update the labels with the inventory quantities
+    public void updateLabels() {
+        for (PlantNames p : PlantNames.values()) {
+            JLabel label = labelMap.get(p);
+            if (label != null) {
+                label.setText(String.valueOf(inventaire.getNombrePlantes(p)));
+            }
+        }
     }
 
     public JScrollPane buildScrollBoutiquePanel(){
@@ -570,7 +599,7 @@ public class View extends JFrame implements Observer {
 
             //int price = getSeedPrice(p);
             //int price = Onion.getPrice();
-            int price =10;
+            int price =Plants.getPriceByName(p);
             String priceString = Integer.toString(price);
             JLabel label = new JLabel(priceString);
             //label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -590,14 +619,13 @@ public class View extends JFrame implements Observer {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     // Handle the mouse click event
-
                     Cursor cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
                     label.setCursor(cursor);
-
-                    //model.diminution(getSeedPrice(p));
-                    if (model.isEnoughMoney(10)){
-                        model.diminution(10);
+                    System.out.println("coût: "+Plants.getPriceByName(p));
+                    if (model.isEnoughMoney(Plants.getPriceByName(p))){
+                        model.diminution(Plants.getPriceByName(p));
                         System.out.println("Achat effectué, il vous reste: "+model.getStringArgent());
+                        inventaire.ajouterPlante(p);
                     }
                     else {
                         System.out.println("Echec de l'achat, vous n'avez plus assez d'argent!");
@@ -734,10 +762,19 @@ public class View extends JFrame implements Observer {
     public void planter(Parcel parcel, int i){
         if (model.getSelected() != null){
             try {
-                Plants plant = getSeedClass(model.getSelected());
-                parcel.setImagePlant(getSeedIcon(model.getSelected()));
-                model.setPlants((int) i /10, i %10, plant);
-                parcel.setPlant(plant);
+                PlantNames p = model.getSelected();
+                if (inventaire.getNombrePlantes(p)>0)
+                {
+                    inventaire.removePlante(p);
+                    Plants plant = getSeedClass(p);
+                    parcel.setImagePlant(getSeedIcon(p));
+                    model.setPlants((int) i /10, i %10, plant);
+                    parcel.setPlant(plant);
+                }
+                else
+                {
+                    model.resetSelection();
+                }
             } catch (IOException ioException) {
                 ioException.printStackTrace();
                 model.setPlants(0, 0, null);

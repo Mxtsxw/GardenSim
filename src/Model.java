@@ -39,6 +39,10 @@ public class Model extends Observable implements Serializable {
         return selected;
     }
 
+    public void resetSelection() {
+        this.selected = null;
+    }
+
     public void setSelected(PlantNames selected) {
         this.selected = selected;
     }

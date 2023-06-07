@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.invoke.SwitchPoint;
 import java.net.URL;
 
 public abstract class Plants implements Serializable {
@@ -60,6 +61,34 @@ public abstract class Plants implements Serializable {
     // Getters & Setters
 
     public static int getPrice(){return price;}
+
+    public static int getPriceByName(PlantNames name){
+        switch(name){
+            case AUBERGINE:
+                return 15;
+            case CARROT:
+                return 1;
+            case PINEAPPLE:
+                return 5;
+            case MUSHROOM:
+                return 1;
+            case PEPPER:
+                return 9;
+            case SALAD:
+                return 2;
+            case ONION:
+                return 4;
+            case CAULIFLOWER:
+                return 4;
+            case STRAWBERRIES:
+                return 15;
+            case CORN:
+                return 8;
+            default :
+                return 10;
+
+        }
+    }
 
     public String getName() {
         return name;
