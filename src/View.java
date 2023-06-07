@@ -567,7 +567,7 @@ public class View extends JFrame implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Code to be executed when Option 2 is selected
-                System.out.println("Option 2 selected");
+                recolt(parcel, index);
             }
         });
 
@@ -670,6 +670,19 @@ public class View extends JFrame implements Observer {
                 ioException.printStackTrace();
                 model.setPlants(0, 0, null);
             }
+        }
+    }
+
+    public void recolt(Parcel parcel, int i) {
+        if (model.getPlants()[(int) i / 10][i % 10] != null) {
+            // Perform the harvesting logic here
+            Plants plant = model.getPlants()[(int) i / 10][i % 10] = null;
+
+            model.augmentation(Plants.getPrice());
+            // Reset the parcel's plant to null after harvesting
+            model.setPlants((int) i / 10, i % 10, null);
+            parcel.setPlant(null);
+            System.out.println(model.getArgent());
         }
     }
 }

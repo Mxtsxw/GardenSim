@@ -5,9 +5,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 
-public abstract class Plants {
+public abstract class Plants implements Serializable {
 
     private String name;
     private int speedGerminationRate;
