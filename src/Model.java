@@ -52,7 +52,9 @@ public class Model extends Observable implements Serializable {
     public String getStringArgent(){
         return String.valueOf(this.argent);
     }
-
+    public int setArgent(int x){
+        return this.argent= x;
+    }
     public void augmentation(int x){
         this.argent+=x;
         setChanged();

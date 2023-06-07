@@ -86,7 +86,7 @@ public class View extends JFrame implements Observer {
 
         // Configuration du JFrame
         this.setTitle("Simulateur de Tomates");
-        this.setSize(600, 500);
+        this.setSize(750, 500);
 
         // Ajout de la barre de menu
         JMenuBar menu = buildJMenuBar();
@@ -124,7 +124,7 @@ public class View extends JFrame implements Observer {
             }
         }
 
-        //mise à jour du reste
+        //mise à jour de l'argent
         this.moneyLevel.setText(model.getStringArgent());
 
     }
@@ -237,7 +237,7 @@ public class View extends JFrame implements Observer {
         JPanel resfreshPanel = buildRefreshRateAction();
 
         // Scroll Panel
-        JScrollPane boutiqueScrollPane = buildScrollSelectionPanel();
+        JScrollPane boutiqueScrollPane = buildScrollBoutiquePanel();
 
         //lignes pour l'argent, la météo et le label de vitesse du jeu
         JPanel moneyPanel = buildMoney();
@@ -471,6 +471,71 @@ public class View extends JFrame implements Observer {
         }
 
         JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        return scrollPane;
+    }
+
+    public JScrollPane buildScrollBoutiquePanel(){
+        JPanel panel = new JPanel(new GridLayout((PlantNames.values().length/2), 2));
+
+        for (PlantNames p: PlantNames.values()) //pour chaque plantes
+        {
+            //image de la pièce
+            try {
+                this.moneyImage = new ImageIcon(getClass().getResource("/resources/images/Coin.png"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            // Définissez la taille souhaitée en pixels
+            int largeur = 15;
+            int hauteur = 15;
+            // Redimensionnez l'image en utilisant la méthode getImage() et getScaledInstance()
+            java.awt.Image imageRedimensionnee = this.moneyImage.getImage().getScaledInstance(largeur, hauteur, java.awt.Image.SCALE_SMOOTH);
+
+            // Créez une nouvelle instance de l'icône en utilisant l'image redimensionnée
+            this.moneyImage = new ImageIcon(imageRedimensionnee);
+            JLabel imageMoney= new JLabel();
+            imageMoney.setIcon(this.moneyImage);
+
+            //int price = getSeedPrice(p);
+            //int price = Onion.getPrice();
+            int price =10;
+            String priceString = Integer.toString(price);
+            JLabel label = new JLabel(priceString);
+            //label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            label.setPreferredSize(new Dimension(75, 50));
+            //label.setHorizontalAlignment(SwingConstants.CENTER);
+            label.setVerticalAlignment(SwingConstants.CENTER);
+
+            try {
+                label.setIcon(new ImageIcon(getSeedIcon(p)));
+            } catch (IOException e) {
+                label.setText(p.toString());
+                e.printStackTrace();
+            }
+
+            // Mouse Listener
+            label.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    // Handle the mouse click event
+
+                    Cursor cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+                    label.setCursor(cursor);
+
+                    //model.diminution(getSeedPrice(p));
+                    model.diminution(10);
+                    System.out.println(model.getStringArgent());
+                }
+            });
+
+            panel.add(label);
+            panel.add(imageMoney);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         return scrollPane;
     }
@@ -499,6 +564,33 @@ public class View extends JFrame implements Observer {
                 return Strawberries.getImage();
             default:
                 return ImageIO.read(getClass().getResource("/resources/images/data.png"));
+        }
+    }
+
+    public int getSeedPrice(PlantNames name) {
+        switch (name){
+            case CARROT:
+                return Carrot.getPrice();
+            case SALAD:
+                return Salad.getPrice();
+            case AUBERGINE:
+                return Aubergine.getPrice();
+            case CAULIFLOWER:
+                return Cauliflower.getPrice();
+            case CORN:
+                return Corn.getPrice();
+            case MUSHROOM:
+                return Mushroom.getPrice();
+            case ONION:
+                return Onion.getPrice();
+            case PEPPER:
+                return Pepper.getPrice();
+            case PINEAPPLE:
+                return Pineapple.getPrice();
+            case STRAWBERRIES:
+                return Strawberries.getPrice();
+            default:
+                return 0;
         }
     }
 

@@ -12,7 +12,7 @@ public abstract class Plants {
     private String name;
     private int speedGerminationRate;
     private int collectTime;
-    private int price;
+    private static int price;
 
     public static Image getImage(int x, int y) throws IOException {
         URL imageURL = Plants.class.getResource("/resources/images/data.png");
@@ -45,7 +45,7 @@ public abstract class Plants {
 
     // Getters & Setters
 
-    public int getPrice(){return price;}
+    public static int getPrice(){return price;}
 
     public String getName() {
         return name;
