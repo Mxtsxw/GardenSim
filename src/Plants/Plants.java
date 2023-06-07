@@ -89,7 +89,8 @@ public abstract class Plants implements Serializable {
         return germinationState;
     }
 
-    public void updateGerminationState() {
+    public void updateGerminationState(Meteo meteo) {
+        double ratio = meteo.getRatio();
         germinationCounter++;
 
         if (germinationCounter >= speedGerminationRate) {

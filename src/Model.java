@@ -1,8 +1,8 @@
 import Plants.PlantNames;
 import Plants.Plants;
+import Plants.Meteo;
 
 import java.util.Observable;
-import java.util.Random;
 import java.io.Serializable;
 
 /**
@@ -21,6 +21,7 @@ public class Model extends Observable implements Serializable {
     private boolean isPaused = false;
     protected int cooldown = 1000;
     private PlantNames selected = null;
+    private Meteo meteo = new Meteo();
 
     private int argent;
 
@@ -111,11 +112,19 @@ public class Model extends Observable implements Serializable {
         return cooldown;
     }
 
+    public Meteo getMeteo() {
+        return meteo;
+    }
+
+    public void setMeteo(Meteo.MeteoNames meteo){
+        this.meteo.setMeteoState(meteo);
+    }
+
     public void UpdatePlants() {
         for (int i = 0; i < this.grid.length; i++) {
             for (int j = 0; j < this.grid.length; j++) {
                 if (this.grid[i][j] != null){
-                    this.grid[i][j].updateGerminationState();
+                    this.grid[i][j].updateGerminationState(meteo);
                 }
             }
         }

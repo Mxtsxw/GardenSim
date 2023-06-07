@@ -143,6 +143,9 @@ public class View extends JFrame implements Observer {
         //mise à jour de l'argent
         //this.moneyLevel.setText(model.getStringArgent());
         this.moneyLabel.setText("Argent: "+model.getStringArgent());
+
+        System.out.println(model.getMeteo());
+        System.out.println(this.model.getMeteo().getMeteoState());
     }
 
     public void updatePauseMenuItem() {
@@ -225,11 +228,59 @@ public class View extends JFrame implements Observer {
 
         // Création des éléments du menu "Plants"
         JMenuItem aleaItem = new JMenuItem("Aléatoire");
-        JMenuItem sunItem = new JMenuItem("Soleil");// mode de jeu normal sans altération
-        JMenuItem droughtItem = new JMenuItem("Sécheresse"); //case seche jaunis croissance complètement stopée
-        JMenuItem winterItem = new JMenuItem("Neige"); //case seche blanchie croissance retardée
-        JMenuItem rainItem = new JMenuItem("Pluvieux"); //case humide noircis croissance accélérée
-        JMenuItem bugItem = new JMenuItem("bug"); //les fruits disparaissent ou pourrissent directement
+        JMenuItem sunItem = new JMenuItem("Soleil");
+        JMenuItem droughtItem = new JMenuItem("Sécheresse");
+        JMenuItem winterItem = new JMenuItem("Neige");
+        JMenuItem rainItem = new JMenuItem("Pluvieux");
+
+
+        final Model model = this.model;
+        // Add MouseListener to each JMenuItem
+        aleaItem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Mise a jour météo from vue");
+                model.setMeteo(Meteo.MeteoNames.ALEATOIRE);
+
+            }
+        });
+
+        sunItem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                model.setMeteo(Meteo.MeteoNames.SOLEIL);
+            }
+        });
+
+        droughtItem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                model.setMeteo(Meteo.MeteoNames.SECHERESSE);
+            }
+        });
+
+        winterItem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                model.setMeteo(Meteo.MeteoNames.NEIGE);
+            }
+        });
+
+        rainItem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                model.setMeteo(Meteo.MeteoNames.PLUVIEUX);
+            }
+        });
+
+        // Add the JMenuItems to your JPopupMenu
+        JPopupMenu menu = new JPopupMenu();
+        menu.add(aleaItem);
+        menu.add(sunItem);
+        menu.add(droughtItem);
+        menu.add(winterItem);
+        menu.add(rainItem);
+
 
         // Ajout des éléments au menu "Plants"
         plantsMenu.add(aleaItem);
@@ -237,7 +288,6 @@ public class View extends JFrame implements Observer {
         plantsMenu.add(droughtItem);
         plantsMenu.add(winterItem);
         plantsMenu.add(rainItem);
-        plantsMenu.add(bugItem);
 
         // Ajout du menu "Plants" à la barre de menu
         menuBar.add(plantsMenu);
