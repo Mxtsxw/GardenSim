@@ -91,6 +91,10 @@ public class Model extends Observable implements Serializable {
         if (this.cooldown > 5000) this.cooldown = 5000;
     }
 
+    public int getCooldown() {
+        return cooldown;
+    }
+
     // La fonction run va être déplacé dans la classe d'ordonnanceur.
 }
 

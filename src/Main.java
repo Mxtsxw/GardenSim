@@ -20,6 +20,10 @@ public class Main {
                 // Ajout d'un observer
                 m.addObserver(view);
 
+                // Scheduler
+                Thread scheduler = new Thread(new Scheduler(m));
+                scheduler.start();
+
                 view.setVisible(true);
 
             }
