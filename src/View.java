@@ -42,6 +42,8 @@ public class View extends JFrame implements Observer {
     protected ImageIcon moneyImage;
     protected ImageIcon meteoImage;
 
+    private JLabel selectedLabel;
+
     protected Inventory inventaire = new Inventory();
 
     public View(Model model) throws IOException {
@@ -525,6 +527,10 @@ public class View extends JFrame implements Observer {
             //label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setVerticalAlignment(SwingConstants.CENTER);
 
+            label.setOpaque(true);
+            label.setBackground(null);
+
+
             // ajout du label à la map
             this.labelMap.put(p, label);
 
@@ -540,14 +546,24 @@ public class View extends JFrame implements Observer {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     // Handle the mouse click event
-
                     System.out.println(inventaire.getNombrePlantes(p));
+
                     if (inventaire.getNombrePlantes(p)>0) {
                         model.setSelected(p);
                         System.out.println("Plante selectionnée");
+
+                        if (selectedLabel != null) {
+                            selectedLabel.setBackground(null);
+                        }
+
+                        label.setBackground(Color.lightGray);
+                        selectedLabel = label;
                     }
                     else {
                         System.out.println("Vous n'avez pas de graines!");
+                        if (selectedLabel != null) {
+                            selectedLabel.setBackground(null);
+                        }
                         model.resetSelection();
                     }
                 }
