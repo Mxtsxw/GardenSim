@@ -357,7 +357,7 @@ public class View extends JFrame implements Observer {
 
     public JPanel buildLabelTime(){
         JPanel panel = new JPanel(new FlowLayout());
-        JLabel timeLabel = new JLabel("Vitesse du jeu :");
+        JLabel timeLabel = new JLabel("Vitesse du jeu");
         panel.add(timeLabel);
         return panel;
     }
