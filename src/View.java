@@ -418,17 +418,19 @@ public class View extends JFrame implements Observer {
             parcel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    if (model.getSelected() != null){
-                        try {
-                            Plants plant = getSeedClass(model.getSelected());
-                            parcel.setImagePlant(getSeedIcon(model.getSelected()));
-                            model.setPlants((int) finalI /10, finalI %10, plant);
-                            parcel.setPlant(plant);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                            model.setPlants(0, 0, null);
+                    System.out.println(parcel.getPlant());
+                    if (parcel.getPlant() != null){
+                        if (parcel.getPlant().getGerminationState() == Plants.GerminationState.GERMINATED){
+                            JPopupMenu menu = buildPopupMenu(parcel, finalI, true);
+                            menu.show(parcel, e.getX(), e.getY());
+                        } else {
+                            JPopupMenu menu = buildPopupMenu(parcel, finalI, false);
+                            menu.show(parcel, e.getX(), e.getY());
                         }
+                    } else {
+                        planter(parcel, finalI);
                     }
+
                 }
             });
             parcel.setBorder(blackLine);
@@ -542,6 +544,40 @@ public class View extends JFrame implements Observer {
         return scrollPane;
     }
 
+    public JPopupMenu buildPopupMenu(Parcel parcel, int index, boolean state){
+        // Create a JPopupMenu
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        // Create menu items
+        JMenuItem menuItem1 = new JMenuItem("Replanter");
+        JMenuItem menuItem2 = new JMenuItem("Récolter");
+
+        menuItem2.setEnabled(state);
+
+        // Add action listeners to the menu items
+        menuItem1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Code to be executed when Option 1 is selected
+                planter(parcel, index);
+            }
+        });
+
+        menuItem2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Code to be executed when Option 2 is selected
+                System.out.println("Option 2 selected");
+            }
+        });
+
+        // Add menu items to the popup menu
+        popupMenu.add(menuItem1);
+        popupMenu.add(menuItem2);
+
+        return popupMenu;
+    }
+
     public Image getSeedIcon(PlantNames name) throws IOException {
         switch (name){
             case CARROT:
@@ -620,6 +656,20 @@ public class View extends JFrame implements Observer {
                 return new Strawberries();
             default:
                 return null;
+        }
+    }
+
+    public void planter(Parcel parcel, int i){
+        if (model.getSelected() != null){
+            try {
+                Plants plant = getSeedClass(model.getSelected());
+                parcel.setImagePlant(getSeedIcon(model.getSelected()));
+                model.setPlants((int) i /10, i %10, plant);
+                parcel.setPlant(plant);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+                model.setPlants(0, 0, null);
+            }
         }
     }
 }
