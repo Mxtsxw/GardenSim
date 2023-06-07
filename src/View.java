@@ -785,9 +785,9 @@ public class View extends JFrame implements Observer {
     public void recolt(Parcel parcel, int i) {
         if (model.getPlants()[(int) i / 10][i % 10] != null) {
             // Perform the harvesting logic here
-            Plants plant = model.getPlants()[(int) i / 10][i % 10] = null;
-
-            model.augmentation(Plants.getPrice());
+            model.getPlants()[(int) i / 10][i % 10] = null;
+            int price= Plants.getPriceByName(PlantNames.AUBERGINE);
+            model.augmentation(2*Plants.getPrice());
             // Reset the parcel's plant to null after harvesting
             model.setPlants((int) i / 10, i % 10, null);
             parcel.setPlant(null);
