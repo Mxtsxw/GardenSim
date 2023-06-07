@@ -541,8 +541,6 @@ public class View extends JFrame implements Observer {
                 public void mouseClicked(MouseEvent e) {
                     // Handle the mouse click event
 
-                    Cursor cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-                    label.setCursor(cursor);
                     System.out.println(inventaire.getNombrePlantes(p));
                     if (inventaire.getNombrePlantes(p)>0) {
                         model.setSelected(p);
@@ -552,7 +550,18 @@ public class View extends JFrame implements Observer {
                         System.out.println("Vous n'avez pas de graines!");
                         model.resetSelection();
                     }
+                }
 
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    Cursor cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+                    label.setCursor(cursor);
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    Cursor cursor = Cursor.getDefaultCursor();
+                    label.setCursor(cursor);
                 }
             });
 
@@ -619,8 +628,6 @@ public class View extends JFrame implements Observer {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     // Handle the mouse click event
-                    Cursor cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-                    label.setCursor(cursor);
                     System.out.println("coût: "+Plants.getPriceByName(p));
                     if (model.isEnoughMoney(Plants.getPriceByName(p))){
                         model.diminution(Plants.getPriceByName(p));
@@ -630,7 +637,18 @@ public class View extends JFrame implements Observer {
                     else {
                         System.out.println("Echec de l'achat, vous n'avez plus assez d'argent!");
                     }
+                }
 
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    Cursor cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+                    label.setCursor(cursor);
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    Cursor cursor = Cursor.getDefaultCursor();
+                    label.setCursor(cursor);
                 }
             });
 
