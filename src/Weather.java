@@ -8,7 +8,6 @@ import java.util.Random;
 public class Weather extends Observable {
 
     public static enum WeatherNames {
-        ALEATOIRE,
         SOLEIL,
         SECHERESSE,
         NEIGE,
@@ -94,6 +93,10 @@ public class Weather extends Observable {
             default:
                 return 1;
         }
+    }
+
+    public void setRandomState(boolean randomState) {
+        this.randomState = randomState;
     }
 
     public static ImageIcon getWeatherIcon(WeatherNames name) throws IOException {

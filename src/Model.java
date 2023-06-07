@@ -39,6 +39,10 @@ public class Model extends Observable implements Serializable {
         return selected;
     }
 
+    public void setWeatherRandomState(boolean state) {
+        this.weather.setRandomState(state);
+    }
+
     public void resetSelection() {
         this.selected = null;
     }
@@ -49,7 +53,7 @@ public class Model extends Observable implements Serializable {
 
     public void setPlants(int i, int j, Plants plant){
         this.grid[i][j] = plant;
-        System.out.println("Plante ajouté sur " + i + " " +j);
+        System.out.println("Log: ["+ plant.getName()+"] ajouté sur case (" + i + "," +j + ")");
         setChanged();
         notifyObservers(this);
     }
@@ -77,7 +81,7 @@ public class Model extends Observable implements Serializable {
 
     public void diminution(int x){
         this.argent-=x;
-        if (this.argent<0) {this.argent=0;System.out.println("Vous n'avez plus d'argent!");}
+        if (this.argent<0) {this.argent=0;}
         setChanged();
         notifyObservers(this);
     }

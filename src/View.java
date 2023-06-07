@@ -142,8 +142,7 @@ public class View extends JFrame implements Observer {
 
         if (obs instanceof Weather){
             updateMeteoLabel();
-            System.out.println("Weather updated");
-            System.out.println(((Weather) obs).getWeatherState());
+            System.out.println("Log: Météo mise à jour → " + ((Weather) obs).getWeatherState());
         }
     }
 
@@ -238,13 +237,15 @@ public class View extends JFrame implements Observer {
         ActionListener aleaListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.setWeather(Weather.WeatherNames.ALEATOIRE);
+                model.setWeatherRandomState(true);
+                System.out.println("Log: Sélection méteo aléatoire");
             }
         };
 
         ActionListener sunListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                model.setWeatherRandomState(false);
                 model.setWeather(Weather.WeatherNames.SOLEIL);
             }
         };
@@ -252,6 +253,7 @@ public class View extends JFrame implements Observer {
         ActionListener droughtListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                model.setWeatherRandomState(true);
                 model.setWeather(Weather.WeatherNames.SECHERESSE);
             }
         };
@@ -259,6 +261,7 @@ public class View extends JFrame implements Observer {
         ActionListener winterListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                model.setWeatherRandomState(true);
                 model.setWeather(Weather.WeatherNames.NEIGE);
             }
         };
@@ -266,6 +269,7 @@ public class View extends JFrame implements Observer {
         ActionListener rainListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                model.setWeatherRandomState(true);
                 model.setWeather(Weather.WeatherNames.PLUVIEUX);
             }
         };
@@ -406,12 +410,12 @@ public class View extends JFrame implements Observer {
                 if (message=="boutique")
                 {
                     card.show(cardPanel,"BOUTIQUE");
-                    System.out.println("ouverture de la boutique");
+                    System.out.println("Log: Ouverture de la boutique");
                 }
                 else
                 {
                     card.show(cardPanel, "INFO");
-                    System.out.println("fermeture de la boutique");
+                    System.out.println("Log: Fermeture de la boutique");
                 }
             }
         });
@@ -482,7 +486,6 @@ public class View extends JFrame implements Observer {
             parcel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    System.out.println(parcel.getPlant());
                     if (parcel.getPlant() != null){
                         if (parcel.getPlant().getGerminationState() == Plants.GerminationState.GERMINATED){
                             JPopupMenu menu = buildPopupMenu(parcel, finalI, true);
@@ -537,11 +540,10 @@ public class View extends JFrame implements Observer {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     // Handle the mouse click event
-                    System.out.println(inventaire.getNombrePlantes(p));
 
                     if (inventaire.getNombrePlantes(p)>0) {
                         model.setSelected(p);
-                        System.out.println("Plante selectionnée");
+                        System.out.println("Log: Plante [" + p + "] sélectionnée.");
 
                         if (selectedLabel != null) {
                             selectedLabel.setBackground(null);
@@ -551,7 +553,7 @@ public class View extends JFrame implements Observer {
                         selectedLabel = label;
                     }
                     else {
-                        System.out.println("Vous n'avez pas de graines!");
+                        System.out.println("Log: [" + p + "] sélectionné sans graines.");
                         if (selectedLabel != null) {
                             selectedLabel.setBackground(null);
                         }
@@ -635,14 +637,14 @@ public class View extends JFrame implements Observer {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     // Handle the mouse click event
-                    System.out.println("coût: "+Plants.getPriceByName(p));
+                    System.out.print("Log: ["+ p + "] acheté pour : "+Plants.getPriceByName(p));
                     if (model.isEnoughMoney(Plants.getPriceByName(p))){
                         model.diminution(Plants.getPriceByName(p));
-                        System.out.println("Achat effectué, il vous reste: "+model.getStringArgent());
+                        System.out.println("| Argent Restant : " + model.getStringArgent());
                         inventaire.ajouterPlante(p);
                     }
                     else {
-                        System.out.println("Echec de l'achat, vous n'avez plus assez d'argent!");
+                        System.out.println("Log: Echec achat ["+p+"] pas assez d'argent!");
                     }
                 }
 
@@ -816,7 +818,7 @@ public class View extends JFrame implements Observer {
             // Reset the parcel's plant to null after harvesting
             model.setPlants((int) i / 10, i % 10, null);
             parcel.setPlant(null);
-            System.out.println(model.getArgent());
+            System.out.println("Log: ["+parcel.getPlant().getName()+"] recolté pour | Argent : " + model.getArgent());
         }
     }
 }
