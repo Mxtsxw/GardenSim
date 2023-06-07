@@ -57,8 +57,11 @@ public class Model extends Observable implements Serializable {
         return String.valueOf(this.argent);
     }
 
-    public int getArgent() {
-        return argent;
+    public int getArgent(){return this.argent;}
+    public void setArgent(int x){
+        this.argent= x;
+        setChanged();
+        notifyObservers();
     }
 
     public void augmentation(int x){
@@ -69,8 +72,13 @@ public class Model extends Observable implements Serializable {
 
     public void diminution(int x){
         this.argent-=x;
+        if (this.argent<0) {this.argent=0;System.out.println("Vous n'avez plus d'argent!");}
         setChanged();
         notifyObservers();
+    }
+
+    public boolean isEnoughMoney(int x){
+        return (this.argent - x) >=0;
     }
 
     public boolean isPaused() {

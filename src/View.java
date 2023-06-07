@@ -14,6 +14,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JButton;
+import java.util.Random;
 
 public class View extends JFrame implements Observer {
 
@@ -26,9 +27,13 @@ public class View extends JFrame implements Observer {
     protected CardLayout card;
     protected JPanel cardPanel;
 
+    protected JPanel cardContainer;
+
     protected JPanel gridPanel;
 
     protected JTextArea moneyLevel;
+
+    protected JLabel moneyLabel;
 
     protected JMenuItem pauseMenuItem;
 
@@ -69,7 +74,18 @@ public class View extends JFrame implements Observer {
         });
     }
 
+   /* class CardMoney extends JPanel {
+        private JLabel moneyLabel;
 
+        public CardMoney(int money) {
+            moneyLabel = new JLabel("Argent: " + money);
+            add(moneyLabel);
+        }
+
+        public void updateMoney(int money) {
+            moneyLabel.setText("Argent: " + money);
+        }
+    }*/
 
     /**
      * Gère la création des composants de l'interface utilisateur
@@ -96,9 +112,9 @@ public class View extends JFrame implements Observer {
         this.gridPanel = buildParcelPanel();
 
         //par défaut on affiche l'infoPanel, sinon on affiche boutiquePanel
-        this.rightPanel = buildInfoPanel();
+        this.rightPanel = buildInfoPanel(model.getArgent());
         cardPanel.add("INFO",this.rightPanel);
-        JPanel rightPanel2= buildBoutiquePanel();
+        JPanel rightPanel2= buildBoutiquePanel(model.getArgent());
         cardPanel.add("BOUTIQUE",rightPanel2);
 
         this.mainPanel.add(this.gridPanel, BorderLayout.CENTER);
@@ -125,8 +141,8 @@ public class View extends JFrame implements Observer {
         }
 
         //mise à jour de l'argent
-        this.moneyLevel.setText(model.getStringArgent());
-
+        //this.moneyLevel.setText(model.getStringArgent());
+        this.moneyLabel.setText("Argent: "+model.getStringArgent());
     }
 
     public void updatePauseMenuItem() {
@@ -229,7 +245,7 @@ public class View extends JFrame implements Observer {
         return menuBar;
     }
 
-    public JPanel buildBoutiquePanel(){
+    public JPanel buildBoutiquePanel(int money){
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
@@ -240,7 +256,7 @@ public class View extends JFrame implements Observer {
         JScrollPane boutiqueScrollPane = buildScrollBoutiquePanel();
 
         //lignes pour l'argent, la météo et le label de vitesse du jeu
-        JPanel moneyPanel = buildMoney();
+        JPanel moneyPanel = buildMoney(money);
         JPanel boutiqueButton = buildButtonBoutique("retour"); //fermeture
         JPanel timePanel = buildLabelTime();
 
@@ -252,7 +268,7 @@ public class View extends JFrame implements Observer {
 
         return panel;
     }
-    public JPanel buildInfoPanel(){
+    public JPanel buildInfoPanel(int money){
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
@@ -263,7 +279,7 @@ public class View extends JFrame implements Observer {
         JScrollPane seedSelector = buildScrollSelectionPanel();
 
         //lignes pour l'argent, la météo et le label de vitesse du jeu
-        JPanel moneyPanel = buildMoney();
+        JPanel moneyPanel = buildMoney(money);
         JPanel meteoPanel = buildMeteo();
         JPanel boutiqueButton = buildButtonBoutique("boutique"); //ouverture
         JPanel timePanel = buildLabelTime();
@@ -304,11 +320,11 @@ public class View extends JFrame implements Observer {
         return panel;
     }
 
-    public JPanel buildMoney(){
+    public JPanel buildMoney(int money){
         JPanel panel = new JPanel(new FlowLayout());
-        JLabel moneyLabel = new JLabel("Argent :");
-        this.moneyLevel= new JTextArea(model.getStringArgent());
-        moneyLevel.setEditable(false);
+        this.moneyLabel = new JLabel("Argent: "+money);
+        //this.moneyLevel= new JTextArea(model.getStringArgent());
+        //moneyLevel.setEditable(false);
         try {
             this.moneyImage = new ImageIcon(getClass().getResource("/resources/images/Coin.png"));
         } catch (Exception e) {
@@ -326,7 +342,7 @@ public class View extends JFrame implements Observer {
         JLabel imageMoney= new JLabel();
         imageMoney.setIcon(this.moneyImage);
         panel.add(moneyLabel);
-        panel.add(moneyLevel);
+        //panel.add(moneyLevel);
         panel.add(imageMoney);
 
         return panel;
@@ -529,8 +545,14 @@ public class View extends JFrame implements Observer {
                     label.setCursor(cursor);
 
                     //model.diminution(getSeedPrice(p));
-                    model.diminution(10);
-                    System.out.println(model.getStringArgent());
+                    if (model.isEnoughMoney(10)){
+                        model.diminution(10);
+                        System.out.println("Achat effectué, il vous reste: "+model.getStringArgent());
+                    }
+                    else {
+                        System.out.println("Echec de l'achat, vous n'avez plus assez d'argent!");
+                    }
+
                 }
             });
 
