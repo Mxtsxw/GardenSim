@@ -232,54 +232,50 @@ public class View extends JFrame implements Observer {
         JMenuItem winterItem = new JMenuItem("Neige");
         JMenuItem rainItem = new JMenuItem("Pluvieux");
 
-
         final Model model = this.model;
-        // Add MouseListener to each JMenuItem
-        aleaItem.addMouseListener(new MouseAdapter() {
+
+        // Create ActionListener for each JMenuItem
+        ActionListener aleaListener = new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                System.out.println("Mise a jour météo from vue");
+            public void actionPerformed(ActionEvent e) {
                 model.setWeather(Weather.WeatherNames.ALEATOIRE);
-
             }
-        });
+        };
 
-        sunItem.addMouseListener(new MouseAdapter() {
+        ActionListener sunListener = new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 model.setWeather(Weather.WeatherNames.SOLEIL);
             }
-        });
+        };
 
-        droughtItem.addMouseListener(new MouseAdapter() {
+        ActionListener droughtListener = new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 model.setWeather(Weather.WeatherNames.SECHERESSE);
             }
-        });
+        };
 
-        winterItem.addMouseListener(new MouseAdapter() {
+        ActionListener winterListener = new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 model.setWeather(Weather.WeatherNames.NEIGE);
             }
-        });
+        };
 
-        rainItem.addMouseListener(new MouseAdapter() {
+        ActionListener rainListener = new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 model.setWeather(Weather.WeatherNames.PLUVIEUX);
             }
-        });
+        };
 
-        // Add the JMenuItems to your JPopupMenu
-        JPopupMenu menu = new JPopupMenu();
-        menu.add(aleaItem);
-        menu.add(sunItem);
-        menu.add(droughtItem);
-        menu.add(winterItem);
-        menu.add(rainItem);
-
+        // Add ActionListener to each JMenuItem
+        aleaItem.addActionListener(aleaListener);
+        sunItem.addActionListener(sunListener);
+        droughtItem.addActionListener(droughtListener);
+        winterItem.addActionListener(winterListener);
+        rainItem.addActionListener(rainListener);
 
         // Ajout des éléments au menu "Plants"
         plantsMenu.add(aleaItem);
@@ -290,6 +286,7 @@ public class View extends JFrame implements Observer {
 
         // Ajout du menu "Plants" à la barre de menu
         menuBar.add(plantsMenu);
+
 
         return menuBar;
     }
