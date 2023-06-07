@@ -51,7 +51,7 @@ public class Model extends Observable implements Serializable {
         this.grid[i][j] = plant;
         System.out.println("Plante ajouté sur " + i + " " +j);
         setChanged();
-        notifyObservers();
+        notifyObservers(this);
     }
 
     public Plants[][] getPlants() {
@@ -66,20 +66,20 @@ public class Model extends Observable implements Serializable {
     public void setArgent(int x){
         this.argent= x;
         setChanged();
-        notifyObservers();
+        notifyObservers(this);
     }
 
     public void augmentation(int x){
         this.argent+=x;
         setChanged();
-        notifyObservers();
+        notifyObservers(this);
     }
 
     public void diminution(int x){
         this.argent-=x;
         if (this.argent<0) {this.argent=0;System.out.println("Vous n'avez plus d'argent!");}
         setChanged();
-        notifyObservers();
+        notifyObservers(this);
     }
 
     public boolean isEnoughMoney(int x){
@@ -93,7 +93,7 @@ public class Model extends Observable implements Serializable {
     public void togglePause() {
         isPaused = !isPaused;
         setChanged();
-        notifyObservers();
+        notifyObservers(this);
     }
 
     public void setRefreshRate(int i) {
@@ -133,7 +133,7 @@ public class Model extends Observable implements Serializable {
             }
         }
         setChanged();
-        notifyObservers();
+        notifyObservers(this);
     }
 
     // La fonction run va être déplacé dans la classe d'ordonnanceur.

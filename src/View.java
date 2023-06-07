@@ -117,28 +117,27 @@ public class View extends JFrame implements Observer {
 
     @Override
     public void update(Observable obs, Object obj) {
-        //mise à jour de la grille
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                int index = i * 10 + j;
-                Parcel parcel = (Parcel) this.gridPanel.getComponent(index);
-                try {
-                    parcel.repaint();
-                } catch (Exception e) {
-                    e.printStackTrace();
+        if (obs instanceof Model) {
+            //mise à jour de la grille
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 10; j++) {
+                    int index = i * 10 + j;
+                    Parcel parcel = (Parcel) this.gridPanel.getComponent(index);
+                    try {
+                        parcel.repaint();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+
+            //mise à jour de l'argent
+            //this.moneyLevel.setText(model.getStringArgent());
+            this.moneyLabel.setText("Argent: "+model.getStringArgent());
+
+            //mise à jour de l'affichage de l'inventaire
+            updateLabels();
         }
-
-        //mise à jour de l'argent
-        //this.moneyLevel.setText(model.getStringArgent());
-        this.moneyLabel.setText("Argent: "+model.getStringArgent());
-
-        //mise à jour de l'affichage de l'inventaire
-        updateLabels();
-
-        System.out.println(model.getMeteo());
-        System.out.println(this.model.getMeteo().getWeatherState());
     }
 
     public void updatePauseMenuItem() {
