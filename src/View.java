@@ -105,7 +105,6 @@ public class View extends JFrame implements Observer {
         this.mainPanel.add(cardPanel, BorderLayout.EAST);
 
         this.mainPanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-;
         this.add(mainPanel);
     }
 
@@ -115,10 +114,13 @@ public class View extends JFrame implements Observer {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 int index = i * 10 + j;
-                if (model.grid[i][j])
-                    this.gridPanel.getComponent(index).setBackground(Color.RED);
-                else
-                    this.gridPanel.getComponent(index).setBackground(Color.WHITE);
+                Parcel parcel = (Parcel) this.gridPanel.getComponent(index);
+                try {
+                    parcel.repaint();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         }
 
@@ -374,8 +376,7 @@ public class View extends JFrame implements Observer {
         faster.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.increaseRefreshRate(500);
-                System.out.println(e);
+                model.lowerRefreshRate(500);
             }
         });
 
@@ -383,7 +384,6 @@ public class View extends JFrame implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 model.setRefreshRate(1000);
-                System.out.println(e);
                 // Ajoutez d'autres instructions à exécuter lorsque le bouton est cliqué
             }
         });
@@ -391,14 +391,13 @@ public class View extends JFrame implements Observer {
         slower.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.lowerRefreshRate(500);
-                System.out.println(e);
+                model.increaseRefreshRate(500);
             }
         });
 
-        panel.add(faster);
-        panel.add(reset);
         panel.add(slower);
+        panel.add(reset);
+        panel.add(faster);
 
         return panel;
     }
@@ -413,12 +412,21 @@ public class View extends JFrame implements Observer {
         Border blackLine = BorderFactory.createLineBorder(Color.black, 1);
 
         for (int i = 0; i < 100; i++) {
-            JComponent parcel = new Parcel();
+            Parcel parcel = new Parcel();
 
+            int finalI = i;
             parcel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    System.out.println(e);
+                    if (model.getSelected() != null){
+                        try {
+                            parcel.setImagePlant(getSeedIcon(model.getSelected()));
+                            model.setPlants((int) finalI /10, finalI %10, getSeedClass(model.getSelected()));
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                            model.setPlants(0, 0, null);
+                        }
+                    }
                 }
             });
             parcel.setBorder(blackLine);
@@ -428,47 +436,8 @@ public class View extends JFrame implements Observer {
         return panel;
     }
 
-    public JScrollPane buildScrollBoutiquePanel(){
-        JPanel panel = new JPanel(new GridLayout((PlantNames.values().length/2)+1, 2));
-
-        for (PlantNames p: PlantNames.values())
-        {
-            JLabel label = new JLabel();
-            label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-            label.setPreferredSize(new Dimension(50, 50));
-            //label.setHorizontalAlignment(SwingConstants.CENTER);
-            label.setVerticalAlignment(SwingConstants.CENTER);
-            try {
-                label.setIcon(new ImageIcon(getSeedIcon(p)));
-            } catch (IOException e) {
-                label.setText(p.toString());
-                e.printStackTrace();
-            }
-
-            // Mouse Listener
-            label.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    // Handle the mouse click event
-
-                    Cursor cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-                    label.setCursor(cursor);
-
-                    System.out.println("Label clicked: " + p);
-                    // Add your desired logic here
-                }
-            });
-
-            panel.add(label);
-        }
-
-        JScrollPane scrollPane = new JScrollPane(panel);
-
-        return scrollPane;
-    }
-
     public JScrollPane buildScrollSelectionPanel(){
-        JPanel panel = new JPanel(new GridLayout((PlantNames.values().length/2)+1, 2));
+        JPanel panel = new JPanel(new GridLayout((PlantNames.values().length/2), 2));
 
         for (PlantNames p: PlantNames.values())
         {
@@ -477,6 +446,7 @@ public class View extends JFrame implements Observer {
             label.setPreferredSize(new Dimension(50, 50));
             //label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setVerticalAlignment(SwingConstants.CENTER);
+
             try {
                 label.setIcon(new ImageIcon(getSeedIcon(p)));
             } catch (IOException e) {
@@ -493,8 +463,7 @@ public class View extends JFrame implements Observer {
                     Cursor cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
                     label.setCursor(cursor);
 
-                    System.out.println("Label clicked: " + p);
-                    // Add your desired logic here
+                    model.setSelected(p);
                 }
             });
 
@@ -524,12 +493,39 @@ public class View extends JFrame implements Observer {
                 return Onion.getImage();
             case PEPPER:
                 return Pepper.getImage();
-            case PINEAPLE:
+            case PINEAPPLE:
                 return Pineapple.getImage();
             case STRAWBERRIES:
                 return Strawberries.getImage();
             default:
                 return ImageIO.read(getClass().getResource("/resources/images/data.png"));
+        }
+    }
+
+    public Plants getSeedClass(PlantNames name) throws IOException {
+        switch (name){
+            case CARROT:
+                return new Carrot();
+            case SALAD:
+                return new Salad();
+            case AUBERGINE:
+                return new Aubergine();
+            case CAULIFLOWER:
+                return new Cauliflower();
+            case CORN:
+                return new Corn();
+            case MUSHROOM:
+                return new Mushroom();
+            case ONION:
+                return new Onion();
+            case PEPPER:
+                return new Pepper();
+            case PINEAPPLE:
+                return new Pineapple();
+            case STRAWBERRIES:
+                return new Strawberries();
+            default:
+                return null;
         }
     }
 }

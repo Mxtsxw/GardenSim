@@ -1,4 +1,5 @@
 import javax.swing.SwingUtilities;
+import java.awt.*;
 import java.io.IOException;
 
 public class Main {
@@ -20,11 +21,29 @@ public class Main {
                 // Ajout d'un observer
                 m.addObserver(view);
 
-                view.setVisible(true);
+                // Création d'un curseur personnalisé
+                // chargement de l'image
+                Toolkit toolkit = Toolkit.getDefaultToolkit();
+                Image cursorImage = toolkit.getImage("/resources/images/pointeurPelle.png");
 
-                // Création d'un thread pour le rafraîchissement du modèle
-                Thread modelThread = new Thread(m);
-                modelThread.start();
+                // Redefinition de la taille du cursor
+                int newWidth = 32;
+                int newHeight = 32;
+                Image resizedImage = cursorImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+
+                // Create a custom cursor with the resized image
+                Cursor customCursor = toolkit.createCustomCursor(
+                        resizedImage,
+                        new Point(0, 0),
+                        "Custom Cursor"
+                );
+                view.setCursor(customCursor);
+
+                // Scheduler
+                Thread scheduler = new Thread(new Scheduler(m));
+                scheduler.start();
+
+                view.setVisible(true);
 
             }
         });
