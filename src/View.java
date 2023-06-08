@@ -209,6 +209,7 @@ public class View extends JFrame implements Observer {
                 if (loadedModel != null) {
                     // Remplacer le modèle actif par le modèle chargé
                     model = loadedModel;
+                    reloadView();
                 }
             }
         };
@@ -500,7 +501,7 @@ public class View extends JFrame implements Observer {
 
                 }
             });
-            parcel.setBorder(blackLine);
+//            parcel.setBorder(blackLine);
             panel.add(parcel);
         }
 
@@ -767,4 +768,20 @@ public class View extends JFrame implements Observer {
 
         }
     }
+
+    public void reloadView() {
+        // Reset or rebuild the view components
+        this.removeAll(); // Remove existing components from the container
+
+        // Rebuild the view by adding new or updated components
+        // Add your code here to recreate the UI elements and set their initial state
+
+        // Reattach event listeners
+        // Add your code here to reattach any necessary event listeners
+
+        // Validate and repaint the container to reflect the changes
+        this.revalidate();
+        this.repaint();
+    }
+
 }

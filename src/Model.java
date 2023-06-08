@@ -30,6 +30,12 @@ public class Model extends Observable implements Serializable {
         this.weather = weather;
     }
 
+    public Model(int argent){
+        this.grid = new Plants[10][10];
+        this.argent = argent;
+        this.weather = new Weather();
+    }
+
     public Model(Plants[][] grid, int argent) {
         this.grid = grid;
         this.argent=argent;
@@ -67,6 +73,7 @@ public class Model extends Observable implements Serializable {
     }
 
     public int getArgent(){return this.argent;}
+
     public void setArgent(int x){
         this.argent= x;
         setChanged();
