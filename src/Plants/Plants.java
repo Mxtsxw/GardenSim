@@ -60,34 +60,6 @@ public abstract class Plants implements Serializable {
 
     public static int getPrice(){return price;}
 
-    public static int getPriceByName(PlantNames name){
-        switch(name){
-            case AUBERGINE:
-                return 15;
-            case CARROT:
-                return 1;
-            case PINEAPPLE:
-                return 5;
-            case MUSHROOM:
-                return 1;
-            case PEPPER:
-                return 9;
-            case SALAD:
-                return 2;
-            case ONION:
-                return 4;
-            case CAULIFLOWER:
-                return 4;
-            case STRAWBERRIES:
-                return 15;
-            case CORN:
-                return 8;
-            default :
-                return 10;
-
-        }
-    }
-
     public String getName() {
         return name;
     }
@@ -127,6 +99,88 @@ public abstract class Plants implements Serializable {
             germinationState = GerminationState.INTERMEDIATE;
         } else {
             germinationState = GerminationState.BEGINNING;
+        }
+    }
+
+    public static Plants getSeedClass(PlantNames name) throws IOException {
+        switch (name){
+            case CARROT:
+                return new Carrot();
+            case SALAD:
+                return new Salad();
+            case AUBERGINE:
+                return new Aubergine();
+            case CAULIFLOWER:
+                return new Cauliflower();
+            case CORN:
+                return new Corn();
+            case MUSHROOM:
+                return new Mushroom();
+            case ONION:
+                return new Onion();
+            case PEPPER:
+                return new Pepper();
+            case PINEAPPLE:
+                return new Pineapple();
+            case STRAWBERRIES:
+                return new Strawberries();
+            default:
+                return null;
+        }
+    }
+
+    public static int getPriceByName(PlantNames name){
+        switch(name){
+            case AUBERGINE:
+                return 15;
+            case CARROT:
+                return 1;
+            case PINEAPPLE:
+                return 5;
+            case MUSHROOM:
+                return 1;
+            case PEPPER:
+                return 9;
+            case SALAD:
+                return 2;
+            case ONION:
+                return 4;
+            case CAULIFLOWER:
+                return 4;
+            case STRAWBERRIES:
+                return 15;
+            case CORN:
+                return 8;
+            default :
+                return 10;
+
+        }
+    }
+
+    public static Image getSeedIcon(PlantNames name) throws IOException {
+        switch (name){
+            case CARROT:
+                return Carrot.getImage();
+            case SALAD:
+                return Salad.getImage();
+            case AUBERGINE:
+                return Aubergine.getImage();
+            case CAULIFLOWER:
+                return Cauliflower.getImage();
+            case CORN:
+                return Corn.getImage();
+            case MUSHROOM:
+                return Mushroom.getImage();
+            case ONION:
+                return Onion.getImage();
+            case PEPPER:
+                return Pepper.getImage();
+            case PINEAPPLE:
+                return Pineapple.getImage();
+            case STRAWBERRIES:
+                return Strawberries.getImage();
+            default:
+                return ImageIO.read(Plants.class.getResource("/resources/images/data.png"));
         }
     }
 }

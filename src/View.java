@@ -529,7 +529,7 @@ public class View extends JFrame implements Observer {
             this.labelMap.put(p, label);
 
             try {
-                label.setIcon(new ImageIcon(getSeedIcon(p)));
+                label.setIcon(new ImageIcon(Plants.getSeedIcon(p)));
             } catch (IOException e) {
                 label.setText(p.toString());
                 e.printStackTrace();
@@ -626,7 +626,7 @@ public class View extends JFrame implements Observer {
             label.setVerticalAlignment(SwingConstants.CENTER);
 
             try {
-                label.setIcon(new ImageIcon(getSeedIcon(p)));
+                label.setIcon(new ImageIcon(Plants.getSeedIcon(p)));
             } catch (IOException e) {
                 label.setText(p.toString());
                 e.printStackTrace();
@@ -705,87 +705,6 @@ public class View extends JFrame implements Observer {
         return popupMenu;
     }
 
-    public Image getSeedIcon(PlantNames name) throws IOException {
-        switch (name){
-            case CARROT:
-                return Carrot.getImage();
-            case SALAD:
-                return Salad.getImage();
-            case AUBERGINE:
-                return Aubergine.getImage();
-            case CAULIFLOWER:
-                return Cauliflower.getImage();
-            case CORN:
-                return Corn.getImage();
-            case MUSHROOM:
-                return Mushroom.getImage();
-            case ONION:
-                return Onion.getImage();
-            case PEPPER:
-                return Pepper.getImage();
-            case PINEAPPLE:
-                return Pineapple.getImage();
-            case STRAWBERRIES:
-                return Strawberries.getImage();
-            default:
-                return ImageIO.read(getClass().getResource("/resources/images/data.png"));
-        }
-    }
-
-    public int getSeedPrice(PlantNames name) {
-        switch (name){
-            case CARROT:
-                return Carrot.getPrice();
-            case SALAD:
-                return Salad.getPrice();
-            case AUBERGINE:
-                return Aubergine.getPrice();
-            case CAULIFLOWER:
-                return Cauliflower.getPrice();
-            case CORN:
-                return Corn.getPrice();
-            case MUSHROOM:
-                return Mushroom.getPrice();
-            case ONION:
-                return Onion.getPrice();
-            case PEPPER:
-                return Pepper.getPrice();
-            case PINEAPPLE:
-                return Pineapple.getPrice();
-            case STRAWBERRIES:
-                return Strawberries.getPrice();
-            default:
-                return 0;
-        }
-    }
-
-    public Plants getSeedClass(PlantNames name) throws IOException {
-        switch (name){
-            case CARROT:
-                return new Carrot();
-            case SALAD:
-                return new Salad();
-            case AUBERGINE:
-                return new Aubergine();
-            case CAULIFLOWER:
-                return new Cauliflower();
-            case CORN:
-                return new Corn();
-            case MUSHROOM:
-                return new Mushroom();
-            case ONION:
-                return new Onion();
-            case PEPPER:
-                return new Pepper();
-            case PINEAPPLE:
-                return new Pineapple();
-            case STRAWBERRIES:
-                return new Strawberries();
-            default:
-                return null;
-        }
-    }
-
     public void planter(Parcel parcel, int i){
         if (model.getSelected() != null){
             try {
@@ -793,8 +712,8 @@ public class View extends JFrame implements Observer {
                 if (inventaire.getNombrePlantes(p)>0)
                 {
                     inventaire.removePlante(p);
-                    Plants plant = getSeedClass(p);
-                    parcel.setImagePlant(getSeedIcon(p));
+                    Plants plant = Plants.getSeedClass(p);
+                    parcel.setImagePlant(Plants.getSeedIcon(p));
                     model.setPlants((int) i /10, i %10, plant);
                     parcel.setPlant(plant);
                 }
@@ -817,8 +736,8 @@ public class View extends JFrame implements Observer {
             model.augmentation(2*Plants.getPrice());
             // Reset the parcel's plant to null after harvesting
             model.setPlants((int) i / 10, i % 10, null);
+            System.out.println("Log: ["+parcel.getPlant().getName()+"] recolté pour "+ price + " | Argent : " + model.getArgent());
             parcel.setPlant(null);
-            System.out.println("Log: ["+parcel.getPlant().getName()+"] recolté pour | Argent : " + model.getArgent());
         }
     }
 }

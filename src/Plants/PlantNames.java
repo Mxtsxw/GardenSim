@@ -1,5 +1,7 @@
 package Plants;
 
+import java.io.IOException;
+
 /**
  * Liste des plantes
  */

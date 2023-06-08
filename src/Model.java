@@ -53,7 +53,7 @@ public class Model extends Observable implements Serializable {
 
     public void setPlants(int i, int j, Plants plant){
         this.grid[i][j] = plant;
-        System.out.println("Log: ["+ plant.getName()+"] ajouté sur case (" + i + "," +j + ")");
+        if (plant != null) System.out.println("Log: ["+ plant.getName() +"] ajouté sur case (" + i + "," +j + ")");
         setChanged();
         notifyObservers(this);
     }

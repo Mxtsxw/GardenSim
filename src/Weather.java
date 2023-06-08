@@ -2,12 +2,13 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Observable;
 import java.util.Random;
 
-public class Weather extends Observable {
+public class Weather extends Observable implements Serializable {
 
-    public static enum WeatherNames {
+    public enum WeatherNames {
         SOLEIL,
         SECHERESSE,
         NEIGE,
