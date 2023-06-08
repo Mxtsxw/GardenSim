@@ -12,4 +12,9 @@ public class Strawberries extends Plants {
     public static Image getImage() throws IOException {
         return Plants.getImage(0, 2);
     }
+
+    @Override
+    public int getUnitPrice() {
+        return super.getUnitPrice();
+    }
 }

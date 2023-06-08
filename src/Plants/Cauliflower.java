@@ -12,4 +12,9 @@ public class Cauliflower extends Plants {
     public static Image getImage() throws IOException {
         return Plants.getImage(3, 2);
     }
+
+    @Override
+    public int getUnitPrice() {
+        return super.getUnitPrice();
+    }
 }

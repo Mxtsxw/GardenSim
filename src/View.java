@@ -593,6 +593,10 @@ public class View extends JFrame implements Observer {
         }
     }
 
+    /**
+     * Retourne le JPanel correspondant à la section de la boutique.²
+     * @return
+     */
     public JScrollPane buildScrollBoutiquePanel(){
         JPanel panel = new JPanel(new GridLayout((PlantNames.values().length/2), 2));
 
@@ -671,6 +675,13 @@ public class View extends JFrame implements Observer {
         return scrollPane;
     }
 
+    /**
+     *
+     * @param parcel
+     * @param index
+     * @param state
+     * @return
+     */
     public JPopupMenu buildPopupMenu(Parcel parcel, int index, boolean state){
         // Create a JPopupMenu
         JPopupMenu popupMenu = new JPopupMenu();
@@ -705,6 +716,11 @@ public class View extends JFrame implements Observer {
         return popupMenu;
     }
 
+    /**
+     * Permet de planter - Ajoute la plante dans le modèle et dans la parcelle.
+     * @param parcel
+     * @param i
+     */
     public void planter(Parcel parcel, int i){
         if (model.getSelected() != null){
             try {
@@ -728,16 +744,27 @@ public class View extends JFrame implements Observer {
         }
     }
 
+
+    /**
+     * Permet de récolter - met à jour le modèle en réinitialisation l'attribut de plante à null
+     * @param parcel
+     * @param i
+     */
     public void recolt(Parcel parcel, int i) {
         if (model.getPlants()[(int) i / 10][i % 10] != null) {
-            // Perform the harvesting logic here
-            model.getPlants()[(int) i / 10][i % 10] = null;
-            int price= Plants.getPriceByName(PlantNames.AUBERGINE)+5;
-            model.augmentation(2*Plants.getPrice());
+
+            // On récupère le prix
+            int price = model.getPlants()[(int) i / 10][i % 10].getUnitPrice() * 2;
+
+            model.augmentation(price);
+            System.out.println("Log: ["+parcel.getPlant().getName()+"] recolté pour "+ price + " | Argent : " + model.getArgent());
+
+            // Reset la plante enregistrée dans la parcelle
+            parcel.setPlant(null);
+
             // Reset the parcel's plant to null after harvesting
             model.setPlants((int) i / 10, i % 10, null);
-            System.out.println("Log: ["+parcel.getPlant().getName()+"] recolté pour "+ price + " | Argent : " + model.getArgent());
-            parcel.setPlant(null);
+
         }
     }
 }

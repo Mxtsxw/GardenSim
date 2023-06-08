@@ -11,4 +11,9 @@ public class Aubergine extends Plants{
     public static Image getImage() throws IOException {
         return Plants.getImage(2, 1);
     }
+
+    @Override
+    public int getUnitPrice() {
+        return super.getUnitPrice();
+    }
 }

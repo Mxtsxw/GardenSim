@@ -10,9 +10,9 @@ public class ModelLoader {
             model = (Model) objectIn.readObject();
             objectIn.close();
             fileIn.close();
-            System.out.println("Le modèle a été chargé avec succès à partir du fichier : " + filePath);
+            System.out.println("Log: Le modèle a été chargé avec succès à partir du fichier : " + filePath);
         } catch (Exception e) {
-            System.out.println("Une erreur s'est produite lors du chargement du modèle : " + e.getMessage());
+            System.out.println("Log: Une erreur s'est produite lors du chargement du modèle : " + e.getMessage());
             e.printStackTrace();
         }
         return model;

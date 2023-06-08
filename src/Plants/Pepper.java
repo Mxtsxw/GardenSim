@@ -12,4 +12,9 @@ public class Pepper extends Plants {
     public static Image getImage() throws IOException {
         return Plants.getImage(4, 4);
     }
+
+    @Override
+    public int getUnitPrice() {
+        return super.getUnitPrice();
+    }
 }

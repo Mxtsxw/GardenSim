@@ -128,6 +128,9 @@ public class Model extends Observable implements Serializable {
         this.weather.setWeatherState(weather);
     }
 
+    /**
+     * Met à jour la grille du modèle en activant la croissance de chaque plante présente.
+     */
     public void UpdatePlants() {
         for (int i = 0; i < this.grid.length; i++) {
             for (int j = 0; j < this.grid.length; j++) {

@@ -12,4 +12,9 @@ public class Pineapple extends Plants {
     public static Image getImage() throws IOException {
         return Plants.getImage(6, 2);
     }
+
+    @Override
+    public int getUnitPrice() {
+        return super.getUnitPrice();
+    }
 }

@@ -12,4 +12,9 @@ public class Corn extends Plants {
     public static Image getImage() throws IOException {
         return Plants.getImage(5, 1);
     }
+
+    @Override
+    public int getUnitPrice() {
+        return super.getUnitPrice();
+    }
 }

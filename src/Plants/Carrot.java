@@ -11,4 +11,9 @@ public class Carrot extends Plants{
     public static Image getImage() throws IOException {
         return Plants.getImage(1, 1);
     }
+
+    @Override
+    public int getUnitPrice() {
+        return super.getUnitPrice();
+    }
 }

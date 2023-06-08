@@ -15,6 +15,7 @@ public abstract class Plants implements Serializable {
     private static int price;
     private int germinationCounter;
     private GerminationState germinationState;
+    private int unitPrice;
 
     // Constructor, getters, and setters
     public enum GerminationState {
@@ -51,9 +52,14 @@ public abstract class Plants implements Serializable {
         this.name = name;
         this.speedGerminationRate = speedGerminationRate;
         this.collectTime = collectTime;
-        this.price=price;
+        this.price = price; // T'es là mait t'es pas là
+        this.unitPrice = price;
         this.germinationCounter = 0;
         this.germinationState = GerminationState.BEGINNING;
+    }
+
+    public int getUnitPrice() {
+        return unitPrice;
     }
 
     // Getters & Setters
